@@ -1,0 +1,1627 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>視知覺訓練</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* Layout: three screens (cover → 7-tile grid → reading page), one centered column up to 960px */
+:root {
+  --bg: #f3f6f8;
+  --surface: #ffffff;
+  --ink: #1d2a33;
+  --muted: #5b6b76;
+  --line: #d9e2e8;
+  --accent: #1f7a8c;
+  --accent-soft: #dcecef;
+  --warm: #e07a5f;
+  --shadow-filter: brightness(0);
+  --font-display: "LXGW WenKai TC", "Kaiti TC", "STKaiti", serif;
+  --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121a1f; --surface: #1a252c; --ink: #e6eef2; --muted: #9fb0ba;
+    --line: #2b3a43; --accent: #5cc0d2; --accent-soft: #1d3a42; --warm: #f0937a; --shadow-filter: brightness(0) invert(1);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121a1f; --surface: #1a252c; --ink: #e6eef2; --muted: #9fb0ba;
+  --line: #2b3a43; --accent: #5cc0d2; --accent-soft: #1d3a42; --warm: #f0937a; --shadow-filter: brightness(0) invert(1);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 56px;
+}
+.wrap { max-width: 960px; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; font-weight: 700; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible { outline: 3px solid var(--warm); outline-offset: 3px; }
+
+/* Cover */
+.cover {
+  display: grid; place-items: center; text-align: center;
+  min-height: 70vh; gap: 28px; align-content: center;
+}
+.cover h1 { font-size: clamp(3rem, 12vw, 6.5rem); letter-spacing: .08em; line-height: 1.15; }
+.cover .eye { width: min(220px, 60vw); max-width: 100%; }
+.cover p { color: var(--muted); margin: 0; max-width: 32em; }
+.start {
+  border: 0; background: var(--accent); color: var(--surface);
+  font-size: 1.15rem; font-weight: 700; padding: 14px 40px; border-radius: 999px;
+  transition: transform .15s ease;
+}
+.start:hover { transform: translateY(-2px); }
+
+/* Grid */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+.topbar h2 { font-size: clamp(1.8rem, 5vw, 2.4rem); }
+.back {
+  border: 1px solid var(--line); background: var(--surface);
+  padding: 8px 18px; border-radius: 999px; font-size: .95rem; color: var(--muted);
+}
+.back:hover { color: var(--ink); border-color: var(--accent); }
+.lead { color: var(--muted); margin: -12px 0 28px; max-width: 40em; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.tile {
+  display: grid; grid-template-columns: 64px 1fr; gap: 16px; align-items: center;
+  text-align: left; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 14px; padding: 18px; transition: border-color .15s, transform .15s;
+}
+.tile:hover { border-color: var(--accent); transform: translateY(-2px); }
+.tile svg { width: 64px; height: 64px; }
+.tile .num { font-size: .75rem; letter-spacing: .12em; color: var(--muted); }
+.tile h3 { font-size: 1.4rem; line-height: 1.3; }
+.tile .en { font-size: .8rem; color: var(--muted); }
+
+/* Detail */
+.detail-head { display: grid; grid-template-columns: 96px 1fr; gap: 20px; align-items: center; margin-bottom: 24px; }
+.detail-head svg { width: 96px; height: 96px; }
+.detail-head h2 { font-size: clamp(2rem, 6vw, 2.8rem); line-height: 1.2; }
+.detail-head .en { color: var(--muted); font-size: .9rem; letter-spacing: .04em; }
+.article { display: grid; gap: 28px; max-width: 42em; }
+.article section { display: grid; gap: 8px; }
+.article h3 { font-size: 1.35rem; color: var(--accent); }
+.article p { margin: 0; }
+.article ul { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+.definition {
+  background: var(--accent-soft); border-radius: 14px; padding: 18px 20px;
+  font-size: 1.08rem;
+}
+.pager { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 40px; border-top: 1px solid var(--line); padding-top: 20px; }
+.pager button {
+  background: none; border: 0; color: var(--accent); font-weight: 500; padding: 6px 0; text-align: left;
+}
+.pager button:last-child { text-align: right; margin-left: auto; }
+.pager button:hover { text-decoration: underline; }
+.pager small { display: block; color: var(--muted); font-weight: 400; }
+
+/* SVG icon colors */
+.i-s { stroke: var(--accent); fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.i-f { fill: var(--accent); }
+.i-w { fill: var(--warm); }
+.i-ws { stroke: var(--warm); fill: none; stroke-width: 3; stroke-linecap: round; }
+.i-bg { fill: var(--accent-soft); }
+
+/* Mini games */
+.game {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+  padding: 20px; display: grid; gap: 14px; max-width: 42em;
+}
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+.tab {
+  background: none; border: 0; border-bottom: 3px solid transparent; margin-bottom: -1px;
+  padding: 10px 22px; font-size: 1.1rem; font-weight: 500; color: var(--muted);
+}
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
+.game-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.game-head h3 { font-size: 1.35rem; color: var(--warm); }
+.score { color: var(--muted); font-size: .9rem; font-variant-numeric: tabular-nums; }
+.howto { margin: 0; color: var(--muted); }
+.stage { display: grid; gap: 14px; justify-items: center; align-content: center; min-height: 220px; }
+.prompt { margin: 0; font-weight: 500; text-align: center; }
+.cells { display: grid; gap: 8px; width: 100%; max-width: 360px; }
+.cell {
+  aspect-ratio: 1; min-width: 0; padding: 0; display: grid; place-items: center;
+  border: 1px solid var(--line); background: var(--bg); border-radius: 10px; font-size: 1.8rem; line-height: 1;
+}
+.cell.char { font-family: var(--font-display); }
+.dense .cell { font-size: 1.3rem; border-radius: 8px; }
+.levels { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.levels-label { color: var(--muted); font-size: .9rem; margin-right: 4px; }
+.lv { border: 1px solid var(--line); background: var(--bg); border-radius: 999px; padding: 4px 16px; font-size: .95rem; }
+.lv:hover { border-color: var(--accent); }
+.lv[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); font-weight: 700; }
+@media (hover: hover) { .cell:hover { border-color: var(--accent); } }
+.cell.right, .cell.found, .opt.right { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.wrong { animation: shake .35s; }
+@keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+.row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.row .cell { width: 60px; }
+.pic { font-size: 2.2rem; line-height: 1; }
+.slot { width: 56px; height: 56px; border: 2px dashed var(--line); border-radius: 10px; display: grid; place-items: center; font-size: 2rem; }
+.timer { width: min(280px, 100%); height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.timer i { display: block; height: 100%; background: var(--warm); animation: drain 4s linear forwards; }
+@keyframes drain { from { width: 100%; } to { width: 0; } }
+.glyph { display: inline-block; font-size: 2.2rem; font-weight: 700; }
+.shape-target { width: 110px; height: 110px; border: 1px dashed var(--line); border-radius: 12px; display: grid; place-items: center; }
+.shape-target svg, .cell svg { width: 72%; height: 72%; }
+.peek {
+  position: relative; width: 180px; height: 180px; max-width: 100%; border-radius: 14px; overflow: hidden;
+  background: var(--bg); border: 1px solid var(--line); display: grid; place-items: center;
+}
+.peek .big { font-size: 120px; line-height: 1; }
+.mask { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, 1fr); }
+.m { background: var(--muted); opacity: 0; transition: opacity .3s; }
+.m.on { opacity: 1; }
+.opts { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.opt { border: 1px solid var(--line); background: var(--bg); border-radius: 999px; padding: 8px 20px; }
+@media (hover: hover) { .opt:hover { border-color: var(--accent); } }
+.locked .cell, .locked .opt { pointer-events: none; }
+.gbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 12px; }
+.msg { min-height: 1.5em; flex: 1 1 14em; }
+.msg.ok { color: var(--accent); font-weight: 700; }
+.msg.no { color: var(--warm); }
+.next { border: 0; background: var(--accent); color: var(--surface); border-radius: 999px; padding: 8px 22px; font-weight: 700; margin-left: auto; }
+
+/* Adventure: a deliberately dark space world in both themes; its game card uses the page tokens */
+.adv {
+  position: relative; overflow: hidden; border-radius: 20px; max-width: 42em; min-height: 560px;
+  background: radial-gradient(120% 80% at 50% 0%, #3b2d8f 0%, #1d1650 55%, #0e0b2b 100%); color: #ffffff;
+}
+.adv-sky, .adv-fx { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.adv-fx { z-index: 6; }
+.adv-ui { position: relative; z-index: 2; padding: 18px; display: grid; gap: 12px; }
+.adv-top { display: flex; align-items: center; gap: 10px; }
+.adv-title {
+  flex: 1; font-size: clamp(1.6rem, 6vw, 2.2rem);
+  background: linear-gradient(90deg, #ffd43b, #ff8787, #b197fc, #ffd43b); background-size: 300% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 6s linear infinite;
+}
+.adv-total { background: rgba(255,255,255,.12); border-radius: 999px; padding: 4px 12px; color: #ffd43b; font-weight: 700; white-space: nowrap; }
+.adv-snd { background: rgba(255,255,255,.12); border: 0; border-radius: 50%; width: 40px; height: 40px; font-size: 1.1rem; flex: none; }
+.adv-sub { margin: 0; color: #d6d0ff; }
+.adv-map { position: relative; width: 100%; max-width: 440px; margin: 34px auto 24px; aspect-ratio: 4 / 5; }
+.adv-path { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.adv-path polyline { fill: none; stroke: rgba(255,255,255,.4); stroke-width: 3px; stroke-dasharray: 6 9; stroke-linecap: round; animation: dash 1.6s linear infinite; }
+.planet {
+  position: absolute; transform: translate(-50%, -50%); background: none; border: 0; padding: 0; color: #ffffff;
+  display: grid; justify-items: center; gap: 3px; z-index: 2;
+}
+.planet-ball {
+  position: relative; width: clamp(56px, 16vw, 76px); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.75) 0 7%, var(--c) 32%, color-mix(in srgb, var(--c) 50%, #000) 100%);
+  box-shadow: 0 0 26px color-mix(in srgb, var(--c) 75%, transparent), inset -8px -10px 0 rgba(0,0,0,.18);
+  font-weight: 700; font-size: 1.5rem; text-shadow: 0 2px 0 rgba(0,0,0,.3);
+  animation: bob 3s ease-in-out infinite; animation-delay: var(--d, 0s); transition: transform .2s;
+}
+.planet.ringed .planet-ball::after {
+  content: ""; position: absolute; inset: 36% -24%; border: 3px solid rgba(255,255,255,.6); border-radius: 50%; transform: rotate(-18deg);
+}
+@media (hover: hover) { .planet:hover .planet-ball { transform: scale(1.14); } }
+.planet:focus-visible { outline: none; }
+.planet:focus-visible .planet-ball { outline: 3px solid #ffd43b; outline-offset: 4px; }
+.planet.here .planet-ball { box-shadow: 0 0 0 4px rgba(255,255,255,.85), 0 0 34px var(--c), inset -8px -10px 0 rgba(0,0,0,.18); }
+.planet-name { font-size: .85rem; font-weight: 700; background: rgba(0,0,0,.4); padding: 1px 9px; border-radius: 999px; white-space: nowrap; }
+.planet-stars { color: #ffd43b; letter-spacing: 2px; font-size: .9rem; line-height: 1; }
+.planet-stars i { color: rgba(255,255,255,.25); font-style: normal; }
+.adv-rocket {
+  position: absolute; z-index: 3; pointer-events: none; font-size: 2.1rem; line-height: 1;
+  transform: translate(-20%, -125%) rotate(var(--a, 0deg));
+  transition: left 1s cubic-bezier(.6,0,.4,1), top 1s cubic-bezier(.6,0,.4,1), transform .3s;
+  filter: drop-shadow(0 0 10px #ffa94d);
+}
+.adv-rocket span { display: inline-block; animation: wobble 1.2s ease-in-out infinite; }
+
+.lvl { position: relative; display: grid; gap: 12px; }
+.lvl-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.adv-back { background: rgba(255,255,255,.14); color: #ffffff; border: 0; border-radius: 999px; padding: 6px 14px; }
+.heart { display: inline-block; font-size: 1.35rem; transition: transform .35s, opacity .35s, filter .35s; }
+.heart.lost { filter: grayscale(1); opacity: .35; transform: scale(.7) rotate(-20deg); }
+.lvl-head { display: flex; gap: 14px; align-items: center; }
+.lvl-head h3 { font-size: 1.6rem; color: #ffffff; }
+.lvl-meta { color: #d6d0ff; font-variant-numeric: tabular-nums; }
+.lvl-meta .pts { color: #ffd43b; font-size: 1.25rem; }
+.combo { display: inline-block; color: #ff8787; font-weight: 700; }
+.combo.bump { animation: bump .4s; }
+.lvl-planet {
+  position: relative; flex: none; width: 60px; height: 60px; border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.75) 0 7%, var(--c) 32%, color-mix(in srgb, var(--c) 50%, #000) 100%);
+  box-shadow: 0 0 22px var(--c);
+}
+.lvl-planet::before, .lvl-planet::after {
+  content: ""; position: absolute; top: 34%; width: 14px; height: 16px; border-radius: 50%;
+  background: radial-gradient(circle at 50% 62%, #1d1650 0 34%, #ffffff 37%);
+  animation: blink 4s infinite;
+}
+.lvl-planet::before { left: 24%; }
+.lvl-planet::after { right: 24%; }
+.lvl-planet.happy { animation: jump .6s; }
+.lvl-planet.sad { animation: wob .5s; }
+.qdots { display: flex; gap: 10px; justify-content: center; }
+.qdots i { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,.25); transition: all .3s; }
+.qdots i.now { background: #ffffff; transform: scale(1.35); box-shadow: 0 0 10px #ffffff; }
+.qdots i.on { background: var(--c); box-shadow: 0 0 8px var(--c); }
+.lvl-card {
+  background: var(--surface); color: var(--ink); border-radius: 18px; padding: 16px; display: grid; gap: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 0 0 4px color-mix(in srgb, var(--c) 65%, transparent);
+}
+.lvl-card .howto { margin: 0; }
+.lvl-card .stage { min-height: 200px; }
+.lvl-card.pop { animation: pop .45s cubic-bezier(.2,1.6,.4,1); }
+.lvl-card.shake { animation: bigshake .45s; }
+.lvl-msg { min-height: 1.5em; margin: 0; text-align: center; font-weight: 700; }
+.count {
+  position: absolute; inset: 0; z-index: 4; display: grid; place-items: center; pointer-events: none;
+  background: rgba(14,11,43,.6); border-radius: 18px;
+}
+.count span { font-family: var(--font-display); font-size: 5.5rem; color: #ffffff; text-shadow: 0 0 34px var(--c); animation: zoom .6s ease-out both; }
+.float-pts {
+  position: absolute; z-index: 7; pointer-events: none; transform: translate(-50%, -50%);
+  font-family: var(--font-display); font-weight: 700; font-size: 2.4rem; color: #ffd43b;
+  text-shadow: 0 3px 0 #b8860b, 0 0 20px rgba(255,212,59,.7); animation: floatup 1.3s ease-out forwards;
+}
+.lvl-done {
+  position: absolute; inset: -6px; z-index: 5; border-radius: 18px; padding: 20px;
+  background: rgba(14,11,43,.86); display: grid; place-items: center; align-content: center; gap: 12px; text-align: center;
+  animation: fadein .3s;
+}
+.lvl-done h3 { font-size: 1.8rem; color: #ffffff; }
+.lvl-done p { margin: 0; color: #d6d0ff; }
+.lvl-done .pts { color: #ffd43b; font-size: 1.4rem; }
+.lvl-done .trophy { color: #ffd43b; font-weight: 700; font-size: 1.2rem; }
+.big { font-size: 4rem; animation: bob 2s ease-in-out infinite; }
+.done-stars { display: flex; gap: 8px; }
+.dstar { font-size: 3.6rem; line-height: 1; color: rgba(255,255,255,.2); animation: starpop .55s cubic-bezier(.2,1.8,.4,1) both; }
+.dstar.on { color: #ffd43b; text-shadow: 0 0 22px #ffd43b; }
+.done-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.adv-btn {
+  border: 0; border-radius: 999px; padding: 10px 22px; font-weight: 700;
+  background: linear-gradient(90deg, #ffd43b, #ff8787); color: #2a1f6b; box-shadow: 0 4px 0 rgba(192,57,43,.4);
+}
+.adv-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(192,57,43,.4); }
+.adv-btn.ghost { background: rgba(255,255,255,.14); color: #ffffff; box-shadow: none; }
+
+@keyframes shimmer { to { background-position: 300% 0; } }
+@keyframes dash { to { stroke-dashoffset: -30; } }
+@keyframes bob { 50% { transform: translateY(-8px); } }
+@keyframes wobble { 50% { transform: translateY(-5px) rotate(5deg); } }
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+@keyframes jump { 40% { transform: translateY(-16px) scale(1.12); } }
+@keyframes wob { 25% { transform: rotate(-12deg); } 75% { transform: rotate(12deg); } }
+@keyframes bump { 50% { transform: scale(1.5); } }
+@keyframes pop { from { transform: scale(.92); opacity: .4; } }
+@keyframes bigshake { 20% { transform: translateX(-10px) rotate(-1deg); } 40% { transform: translateX(10px) rotate(1deg); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
+@keyframes zoom { from { transform: scale(2.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes floatup { 0% { opacity: 0; transform: translate(-50%, -30%) scale(.6); } 20% { opacity: 1; transform: translate(-50%, -60%) scale(1.15); } 100% { opacity: 0; transform: translate(-50%, -190%) scale(1); } }
+@keyframes starpop { from { transform: scale(0) rotate(-120deg); } }
+@keyframes fadein { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .adv *, .adv *::before, .adv *::after { animation: none !important; transition: none !important; } }
+
+/* Adventure rounds */
+.shadow-target { font-size: 4.5rem; line-height: 1; }
+.howto-row { display: flex; align-items: flex-start; gap: 10px; }
+.howto-row .howto { flex: 1; min-width: 0; }
+.speak { flex: none; border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 999px; padding: 4px 12px; font-size: .9rem; }
+.dir-cue { display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 2.6rem; line-height: 1; }
+.dir-eq { font-size: 1.6rem; color: var(--muted); }
+.dir-house { position: relative; display: inline-grid; place-items: center; width: 2.4em; height: 2.4em; font-size: 1.7rem; border-radius: 50%; background: var(--accent-soft); margin: .5em; }
+.dir-arrow { position: absolute; left: 50%; top: 50%; width: 2.4em; height: 2.4em; overflow: visible; }
+.dir-arrow path { fill: var(--warm); }
+.speak-text { font-size: .95rem; color: var(--muted); }
+.cell.line-opt { padding: 8px; }
+.cell.line-opt .fig { width: 100%; height: 100%; }
+.mini-target { border: 2px solid var(--ink); border-radius: 12px; padding: 10px 14px; background: var(--surface); }
+.mini-card { display: inline-grid; gap: 4px; justify-items: center; line-height: 1; }
+.mini-card > span { display: inline-block; }
+.mini-target .mini-card { font-size: 2rem; }
+.mini-opt .mini-card { font-size: 1.35rem; }
+.dense .mini-opt .mini-card, .mini-opt:only-child .mini-card { font-size: 1.1rem; }
+.cell.shadow span { filter: var(--shadow-filter); font-size: 2.3rem; transition: filter .4s; }
+.cell.shadow.unshadow span { filter: none; }
+.big-prompt { font-size: 1.3rem; }
+.cell.treasure { font-size: 2rem; }
+.cell.covered { background: var(--accent-soft); }
+.cell.ref { font-size: 2rem; background: var(--accent-soft); border-style: dashed; }
+.pads { display: grid; gap: 18px; width: 100%; max-width: 280px; }
+.pad {
+  aspect-ratio: 1; border: 0; border-radius: 50%; padding: 0; opacity: .4;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.7) 0 8%, var(--pc) 35%);
+  transition: transform .15s, opacity .15s, box-shadow .15s;
+}
+.pad.lit { opacity: 1; transform: scale(1.14); box-shadow: 0 0 28px var(--pc); }
+.sky-field { position: relative; width: 100%; max-width: 360px; aspect-ratio: 1; border-radius: 14px; overflow: hidden; background: var(--bg); border: 1px solid var(--line); }
+.sky-field button { position: absolute; background: none; border: 0; padding: 0; line-height: 1; transform: translate(-50%, -50%) rotate(var(--r)); }
+.sky-field button.found { border-radius: 50%; box-shadow: 0 0 0 4px var(--accent); background: var(--accent-soft); }
+.fog-box { width: 170px; height: 170px; max-width: 100%; display: grid; place-items: center; border-radius: 50%; background: var(--bg); border: 1px solid var(--line); overflow: hidden; }
+.fog { font-size: 6.5rem; line-height: 1; transition: filter 9s linear; }
+
+/* Impact */
+.impact { margin-top: 40px; display: grid; gap: 12px; }
+.impact h3 { font-size: 1.5rem; }
+.impact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0 24px; }
+.impact-item { border-top: 1px solid var(--line); padding-block: 12px; min-width: 0; }
+.impact-item h4 { margin: 0 0 2px; font-size: 1rem; color: var(--accent); }
+.impact-item p { margin: 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+
+/* Assessment */
+.tile-test { background: var(--accent-soft); border-style: dashed; }
+.tile-adv { background: linear-gradient(135deg, #2a1f6b, #4a3aa8); border-color: transparent; color: #ffffff; }
+.tile-adv .num, .tile-adv .en { color: #d6d0ff; }
+.tile-adv h3 { color: #ffd43b; }
+.facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.facts > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 2px; min-width: 0; }
+.sub-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+.sub { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; display: grid; gap: 0; }
+.sub:hover { border-color: var(--accent); }
+.sub-name { font-weight: 700; color: var(--accent); }
+.test-card { border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: grid; gap: 6px; background: var(--surface); }
+.test-card h3 { color: var(--ink); font-size: 1.3rem; }
+.meta { color: var(--muted); font-size: .9rem; margin: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 2px 12px; font-size: .85rem; }
+.progress { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.progress i { display: block; height: 100%; background: var(--accent); }
+.res { display: grid; }
+.res-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.res-name { flex: 1 1 8em; font-weight: 500; }
+.dots { display: flex; gap: 5px; }
+.dots i { width: 14px; height: 14px; border-radius: 50%; background: var(--line); }
+.dots i.on { background: var(--accent); }
+.res-tag { min-width: 6em; font-size: .9rem; color: var(--warm); }
+.res-tag.good { color: var(--accent); }
+.res-tag.low { color: var(--warm); font-weight: 700; }
+.meter { position: relative; flex: 1 1 100px; min-width: 80px; max-width: 200px; height: 10px; background: var(--line); border-radius: 5px; }
+.meter i { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 5px; }
+.meter b { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--warm); }
+.practice-tag { margin: 0; justify-self: start; background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 2px 12px; font-size: .85rem; font-weight: 700; }
+.q-opt.miss { border-color: var(--warm); }
+.res-pts { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .9rem; }
+.age-form { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.age-form label { font-weight: 700; }
+.age-field { display: inline-flex; align-items: center; gap: 6px; }
+.age-form input { width: 6em; font: inherit; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); }
+.age-form input:focus-visible { outline: 3px solid var(--warm); outline-offset: 1px; }
+.age-form .next { margin-left: 0; }
+.q-stim { width: 150px; height: 150px; max-width: 100%; border: 2px solid var(--ink); border-radius: 8px; display: grid; place-items: center; background: var(--surface); padding: 10px; }
+.q-memo { width: auto; min-width: 150px; padding: 14px; }
+.q-stim .fig { width: 100%; height: 100%; }
+.q-opts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; width: 100%; max-width: 560px; }
+.q-opts.list { grid-template-columns: 1fr; max-width: 380px; }
+.q-opt { position: relative; aspect-ratio: 1; min-width: 0; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; display: grid; place-items: center; padding: 10px; }
+.q-opts.list .q-opt { aspect-ratio: auto; padding: 10px 10px 10px 32px; }
+@media (hover: hover) { .q-opt:hover { border-color: var(--accent); } }
+.q-opt { -webkit-tap-highlight-color: transparent; }
+.q-opt:focus:not(:focus-visible) { outline: none; }
+.q-opt.picked { border-color: var(--accent); background: var(--accent-soft); }
+.q-opt .fig { width: 100%; height: 100%; }
+.q-num { position: absolute; top: 4px; left: 8px; font-size: .8rem; color: var(--muted); }
+.fig-g { stroke: var(--ink); stroke-width: 2.5px; stroke-linecap: round; fill: none; }
+.seq { display: flex; gap: 8px; justify-content: center; }
+.seq .fig { width: 44px; height: 44px; }
+.q-memo .seq .fig { width: 56px; height: 56px; }
+@media (max-width: 480px) { .q-opts { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 300px; } .seq .fig { width: 36px; height: 36px; } }
+
+.view { animation: in .3s ease both; }
+@keyframes in { from { opacity: .4; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .view, .wrong { animation: none; } .tile, .start, .m { transition: none; } }
+@media (max-width: 480px) {
+  .detail-head { grid-template-columns: 64px 1fr; gap: 14px; }
+  .detail-head svg { width: 64px; height: 64px; }
+}
+</style>
+
+<div class="wrap" id="app"></div>
+
+<script>
+const ICONS = {
+  discrimination: `<rect class="i-bg" x="2" y="2" width="60" height="60" rx="14"/><circle class="i-f" cx="21" cy="32" r="9"/><circle class="i-f" cx="43" cy="32" r="9"/><circle class="i-w" cx="46" cy="28" r="3"/>`,
+  memory: `<rect class="i-bg" x="2" y="2" width="60" height="60" rx="14"/><rect class="i-s" x="14" y="16" width="36" height="26" rx="4"/><path class="i-s" d="M24 50h16M32 42v8"/><path class="i-ws" d="M22 34l6-8 5 5 4-4 6 7"/>`,
+  spatial: `<rect class="i-bg" x="2" y="2" width="60" height="60" rx="14"/><path class="i-s" d="M12 52V12M12 52h40"/><rect class="i-f" x="20" y="34" width="10" height="10" rx="2"/><rect class="i-w" x="36" y="18" width="10" height="10" rx="2"/>`,
+  constancy: `<rect class="i-bg" x="2" y="2" width="60" height="60" rx="14"/><path class="i-s" d="M10 40l9-16 9 16z"/><path class="i-s" d="M36 22l20 6-14 16z"/><path class="i-ws" d="M28 50c6 4 14 4 20-2"/>`,
+  sequential: `<rect class="i-bg" x="2" y="2" width="60" height="60" rx="14"/><circle class="i-f" cx="14" cy="32" r="5"/><rect class="i-w" x="25" y="27" width="10" height="10" rx="2"/><path class="i-f" d="M44 37l6-11 6 11z"/><path class="i-s" d="M12 48h40"/>`,
+  figureground: `<rect class="i-bg" x="2" y="2" width="60" height="60" rx="14"/><path class="i-s" d="M10 18l44 30M10 46l44-28M32 10v44M8 32h48" style="stroke:var(--line)"/><path class="i-ws" d="M20 40l12-20 12 20z"/>`,
+  closure: `<rect class="i-bg" x="2" y="2" width="60" height="60" rx="14"/><path class="i-s" d="M32 12a20 20 0 0 1 19 14M51 38a20 20 0 0 1-15 13M26 51A20 20 0 0 1 12 36M13 25a20 20 0 0 1 10-11"/><circle class="i-w" cx="32" cy="32" r="4"/>`
+};
+
+const SKILLS = [
+  {
+    id: "discrimination", name: "視覺辨別", en: "Visual Discrimination",
+    def: "能看出兩個或多個圖形、物品之間的相同與不同，包括形狀、大小、顏色、方向和細節上的差異。",
+    why: "視覺辨別是認字和閱讀的基礎。孩子要能分辨「人」和「入」、「b」和「d」，才能正確認讀文字；在生活中，也要靠它分辨相似的物品，例如找出自己的水壺。",
+    signs: [
+      "常把字形相近的字認錯或寫錯，例如「未／末」、「己／已」",
+      "玩「找不同」遊戲時很吃力，容易漏掉細節",
+      "分類物品時，只注意顏色而忽略形狀或大小",
+      "抄寫時漏掉筆畫或部件"
+    ],
+    activities: [
+      "找不同：兩張相似的圖片，圈出不一樣的地方",
+      "配對卡：從一堆卡片中找出完全相同的兩張",
+      "字形比較：把相似字放在一起，說出哪裡不同",
+      "生活練習：整理襪子、餐具，依樣式配對歸位"
+    ]
+  },
+  {
+    id: "memory", name: "視覺記憶", en: "Visual Memory",
+    def: "看過一個圖形或畫面後，能在短時間內把它記住，並在之後認出或回想出來。",
+    why: "抄寫黑板、記住字的樣子、認得走過的路，都需要視覺記憶。視覺記憶較弱的孩子，往往需要一直來回看範本，抄寫速度慢、也容易出錯。",
+    signs: [
+      "抄寫時要看一筆寫一筆，無法一次記住整個字",
+      "學過的生字很快就忘了怎麼寫",
+      "記不住剛看過的圖片內容",
+      "常找不到剛剛放下的東西"
+    ],
+    activities: [
+      "翻牌記憶：把圖卡蓋起來，翻開兩張找出相同的一對",
+      "看圖回想：看一張圖 10 秒後蓋上，說出圖中有什麼",
+      "少了什麼：桌上擺幾樣物品，偷偷拿走一樣讓孩子猜",
+      "看後畫出：看一個簡單圖形後，憑記憶畫出來"
+    ]
+  },
+  {
+    id: "spatial", name: "視覺空間關係", en: "Visual Spatial Relationships",
+    def: "能判斷物體之間的位置關係，例如上下、左右、前後、裡外，以及圖形的方向是否轉向或翻轉。",
+    why: "寫字時部件的位置、數學中的直式對位、看地圖和排隊找位置，都依賴空間關係的判斷。空間概念不足時，常出現左右顛倒或字寫得歪七扭八的情況。",
+    signs: [
+      "常寫出左右相反的字或數字，例如把「3」寫反",
+      "字的部件位置放錯，或寫字超出格子",
+      "分不清左右，聽指令「往左轉」會轉錯",
+      "拼圖、積木依圖組裝有困難"
+    ],
+    activities: [
+      "方位指令：「把球放在椅子下面」「站在桌子左邊」",
+      "依圖排積木：照著卡片上的樣子把積木排出來",
+      "點點連線：在方格紙上照範例畫出相同的圖形",
+      "鏡像找一找：從幾個圖形中找出方向不同的那一個"
+    ]
+  },
+  {
+    id: "constancy", name: "視覺形狀恆常", en: "Form Constancy",
+    def: "即使圖形的大小、顏色、方向或位置改變了，仍然能認出它是同一個形狀或物品。",
+    why: "同一個字在課本、黑板、招牌上的字體和大小都不一樣，孩子要有形狀恆常的能力，才能知道它們是同一個字。這也幫助孩子在不同場合認出熟悉的物品。",
+    signs: [
+      "換了字體或大小就認不出學過的字",
+      "在課本上會認的字，到了黑板或繪本上就不認得",
+      "看到轉了方向的圖形，以為是不同的東西",
+      "從不同角度看物品時，難以辨認"
+    ],
+    activities: [
+      "形狀大搜查：在家裡或戶外找出所有「圓形」的東西",
+      "字體配對：把不同字體的同一個字連在一起",
+      "旋轉配對：找出轉了方向但其實相同的圖形",
+      "大小排排站：把大小不同的同種圖形分在同一組"
+    ]
+  },
+  {
+    id: "sequential", name: "視覺序列記憶", en: "Visual Sequential Memory",
+    def: "能記住一連串圖形、符號或文字出現的先後順序，並依照原本的順序回想出來。",
+    why: "拼字、寫出筆畫順序、抄寫一串數字或電話號碼，都需要記住「順序」。序列記憶較弱時，孩子可能每個符號都認得，卻把順序弄亂。",
+    signs: [
+      "抄寫數字或英文單字時順序顛倒，例如把「15」寫成「51」",
+      "記不住筆順，或字的部件前後放錯",
+      "照著步驟圖做勞作時，常跳過或做錯順序",
+      "背誦注音、字母順序有困難"
+    ],
+    activities: [
+      "串珠模仿：看一串顏色珠子的排列，照順序串出來",
+      "圖卡排序：看完一排圖卡後打亂，再排回原本的順序",
+      "數字閃卡：快速看一組數字，蓋上後依序寫出",
+      "故事圖排序：把連環漫畫的格子依故事發生的順序排好"
+    ]
+  },
+  {
+    id: "figureground", name: "視覺主題背景", en: "Visual Figure-Ground",
+    def: "能在複雜或雜亂的背景中，找到並專注在自己要看的目標上，不被周圍的其他東西干擾。",
+    why: "在一整頁密密麻麻的文字中找到要讀的那一行、在擁擠的書包裡找到鉛筆盒，都是主題背景能力的表現。這項能力弱的孩子，容易在閱讀時跳行，或看起來不專心。",
+    signs: [
+      "閱讀時常跳行、漏字，或找不到讀到哪裡",
+      "在一頁很多題目的作業中，會漏寫題目",
+      "很難在抽屜或書包裡找到東西",
+      "玩「威利在哪裡」這類找東西的圖畫書很吃力"
+    ],
+    activities: [
+      "隱藏圖畫：在複雜的圖中找出藏起來的指定物品",
+      "重疊圖形：從交疊在一起的線條中描出某一個形狀",
+      "字海找字：在一格格的文字中圈出指定的字",
+      "生活練習：在書架上找出指定的書、在超市找出指定商品"
+    ]
+  },
+  {
+    id: "closure", name: "視覺完形", en: "Visual Closure",
+    def: "只看到圖形或物品的一部分，就能在腦中把缺少的部分補齊，認出完整的樣子。",
+    why: "閱讀時我們不會一筆一畫地看字，而是快速掃過就能認出整個字或詞，這就需要視覺完形。它也讓孩子能認出被遮住一半的物品，或字跡不清楚的字。",
+    signs: [
+      "字跡模糊或印刷不清楚時就認不出來",
+      "閱讀速度慢，需要逐字逐筆地看",
+      "看到被遮住一部分的物品，猜不出是什麼",
+      "拼圖時難以想像完成後的樣子"
+    ],
+    activities: [
+      "缺角猜猜看：只露出圖片的一部分，猜猜是什麼",
+      "補完圖形：把畫了一半的圖形畫完整",
+      "虛線連連看：把斷斷續續的虛線連成完整圖案",
+      "遮字猜字：用紙遮住字的一部分，讓孩子猜出是哪個字"
+    ]
+  }
+];
+
+/* ---------- Mini games ---------- */
+const NAMED = [
+  { e: "🍎", n: "蘋果" }, { e: "🐶", n: "小狗" }, { e: "🚗", n: "汽車" }, { e: "⭐", n: "星星" },
+  { e: "🎈", n: "氣球" }, { e: "🐟", n: "魚" }, { e: "🌸", n: "花" }, { e: "🍌", n: "香蕉" },
+  { e: "⚽", n: "足球" }, { e: "🐱", n: "小貓" }, { e: "🚀", n: "火箭" }, { e: "🍉", n: "西瓜" },
+  { e: "🦋", n: "蝴蝶" }, { e: "🎁", n: "禮物" }, { e: "🌙", n: "月亮" }, { e: "🍓", n: "草莓" }
+];
+let RNG = Math.random;
+const rand = (n) => Math.floor(RNG() * n);
+const pick = (a) => a[rand(a.length)];
+const shuffle = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = rand(i + 1); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+const sample = (a, n) => shuffle(a).slice(0, n);
+const shake = (el) => { el.classList.remove("wrong"); void el.offsetWidth; el.classList.add("wrong"); };
+const timerBar = (ms) => `<div class="timer" aria-hidden="true"><i style="animation-duration:${ms}ms"></i></div>`;
+const on = (c, sel, fn) => c.stage.querySelectorAll(sel).forEach(b => b.onclick = () => { if (!c.locked) fn(b, +b.dataset.i); });
+const gridCls = (n) => `cells${n >= 6 ? " dense" : ""}" style="grid-template-columns:repeat(${n},1fr)`;
+
+const LEVELS = ["簡單", "普通", "困難"];
+let level = 1;
+try { const v = +localStorage.getItem("vp-level"); if (v >= 0 && v <= 2) level = v; } catch (e) {}
+
+const SHAPES = {
+  house: "M20 90 V45 L50 15 L80 45 V90 Z",
+  arrow: "M10 40 H55 V20 L90 50 L55 80 V60 H10 Z",
+  star: "M50 8 L61 38 L93 38 L67 57 L77 90 L50 70 L23 90 L33 57 L7 38 L39 38 Z",
+  heart: "M50 85 C10 58 8 22 32 18 C42 16 48 24 50 30 C52 24 58 16 68 18 C92 22 90 58 50 85 Z",
+  cross: "M35 10 H65 V35 H90 V65 H65 V90 H35 V65 H10 V35 H35 Z",
+  trapezoid: "M28 25 H72 L92 78 H8 Z",
+  flag: "M20 12 H80 L62 40 L80 68 H32 V90 H20 Z"
+};
+const shapeSvg = (k, rot, sc, col) =>
+  `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="${SHAPES[k]}" transform="rotate(${rot} 50 50) translate(50 50) scale(${sc}) translate(-50 -50)" style="fill:var(${col})"/></svg>`;
+
+const GAMES = {
+  discrimination: {
+    title: "找出不一樣的字",
+    howto: (L) => `${[9, 16, 25][L]} 個字裡面，有一個和其他的不一樣，把它找出來。`,
+    round(c, L) {
+      const side = [3, 4, 5][L], n = side * side;
+      const [a, b] = shuffle(pick([["未","末"],["己","已"],["人","入"],["日","曰"],["大","太"],["王","玉"],["土","士"],["天","夭"],["汗","汙"]]));
+      const odd = rand(n);
+      c.stage.innerHTML = `<div class="${gridCls(side)}">${Array.from({ length: n }, (_, i) => `<button class="cell char" data-i="${i}">${i === odd ? b : a}</button>`).join("")}</div>`;
+      on(c, ".cell", (btn, i) => {
+        if (i === odd) { btn.classList.add("right"); c.win(`答對了！不一樣的是「${b}」，其他都是「${a}」。`); }
+        else { shake(btn); c.say("這個和大家一樣喔，再找找看。", "no"); }
+      });
+    }
+  },
+  memory: {
+    title: "少了哪一個",
+    howto: (L) => `先記住 ${[3, 5, 7][L]} 個圖案（${[5, 4, 3][L]} 秒），時間到後會少一個，選出不見的那個。`,
+    round(c, L) {
+      const ms = [5000, 4000, 3000][L];
+      const items = sample(NAMED, [3, 5, 7][L]), missing = pick(items);
+      c.stage.innerHTML = `<p class="prompt">記住這些圖案</p><div class="row">${items.map(x => `<span class="pic">${x.e}</span>`).join("")}</div>${timerBar(ms)}`;
+      c.later(() => {
+        const left = shuffle(items.filter(x => x !== missing));
+        const opts = shuffle([missing, ...sample(NAMED.filter(x => !items.includes(x)), 3)]);
+        c.stage.innerHTML = `<div class="row">${left.map(x => `<span class="pic">${x.e}</span>`).join("")}</div>
+          <p class="prompt">哪一個不見了？</p>
+          <div class="row">${opts.map((x, i) => `<button class="cell pic" data-i="${i}" aria-label="${x.n}">${x.e}</button>`).join("")}</div>`;
+        on(c, ".cell", (btn, i) => {
+          if (opts[i] === missing) { btn.classList.add("right"); c.win(`答對了！不見的是${missing.n}。`); }
+          else { shake(btn); c.say("不是這個喔，再想想看。", "no"); }
+        });
+      }, ms);
+    }
+  },
+  spatial: {
+    title: "哪一個翻面了",
+    howto: (L) => L === 0
+      ? "這些字母裡，只有一個是左右翻面的，把它找出來。"
+      : "這些字母都轉了方向，其中只有一個是左右翻面的，把它找出來。",
+    round(c, L) {
+      const n = [4, 6, 9][L], rots = L === 0 ? [0] : [0, 90, 180, 270];
+      const ch = pick(["R", "F", "G", "P", "4", "ㄅ"]), odd = rand(n);
+      c.stage.innerHTML = `<div class="${gridCls(L === 0 ? 2 : 3)}">${Array.from({ length: n }, (_, i) => {
+        const t = `rotate(${pick(rots)}deg)${i === odd ? " scaleX(-1)" : ""}`;
+        return `<button class="cell" data-i="${i}"><span class="glyph" style="transform:${t}">${ch}</span></button>`;
+      }).join("")}</div>`;
+      on(c, ".cell", (btn, i) => {
+        if (i === odd) { btn.classList.add("right"); c.win("答對了！這個是左右翻面的。"); }
+        else { shake(btn); c.say(L === 0 ? "這個是正常的喔，再看看。" : "這個只是轉了方向，沒有翻面喔。", "no"); }
+      });
+    }
+  },
+  constancy: {
+    title: "找出相同的形狀",
+    howto: (L) => L === 0
+      ? "下面的形狀大小不一樣，找出和上面那個是同一種形狀的。"
+      : "下面的形狀大小、顏色和方向都變了，找出和上面那個是同一種形狀的。",
+    round(c, L) {
+      const keys = Object.keys(SHAPES), target = pick(keys), n = [3, 4, 6][L];
+      const opts = shuffle([target, ...sample(keys.filter(k => k !== target), n - 1)]);
+      const cols = L === 0 ? ["--accent"] : ["--accent", "--warm", "--muted"];
+      const rot = () => L === 0 ? 0 : rand(8) * 45;
+      c.stage.innerHTML = `<div class="shape-target">${shapeSvg(target, 0, 1, "--accent")}</div>
+        <div class="${gridCls(n === 6 ? 3 : n)}">${opts.map((k, i) => `<button class="cell" data-i="${i}" aria-label="選項 ${i + 1}">${shapeSvg(k, rot(), (0.55 + Math.random() * 0.4).toFixed(2), pick(cols))}</button>`).join("")}</div>`;
+      on(c, ".cell", (btn, i) => {
+        if (opts[i] === target) { btn.classList.add("right"); c.win(L === 0 ? "答對了！大小變了，還是同一個形狀。" : "答對了！大小、顏色、方向變了，還是同一個形狀。"); }
+        else { shake(btn); c.say("形狀不一樣喔，再比比看。", "no"); }
+      });
+    }
+  },
+  sequential: {
+    title: "照順序點出來",
+    howto: (L) => `記住 ${[3, 4, 6][L]} 個圖案出現的順序，時間到後依照相同的順序點出來。`,
+    round(c, L) {
+      const len = [3, 4, 6][L], ms = [4000, 4000, 5000][L];
+      const pal = sample(NAMED, [4, 5, 6][L]), seq = Array.from({ length: len }, () => pick(pal));
+      c.stage.innerHTML = `<p class="prompt">記住順序</p><div class="row">${seq.map(x => `<span class="slot">${x.e}</span>`).join("")}</div>${timerBar(ms)}`;
+      c.later(() => {
+        let pos = 0;
+        c.stage.innerHTML = `<div class="row">${seq.map(() => `<span class="slot"></span>`).join("")}</div>
+          <p class="prompt">依照順序點出來</p>
+          <div class="row">${pal.map((x, i) => `<button class="cell pic" data-i="${i}" aria-label="${x.n}">${x.e}</button>`).join("")}</div>`;
+        const slots = c.stage.querySelectorAll(".slot");
+        on(c, ".cell", (btn, i) => {
+          if (pal[i] === seq[pos]) {
+            slots[pos].textContent = pal[i].e; pos++;
+            if (pos === seq.length) c.win("答對了！順序完全正確。");
+          } else {
+            shake(btn); c.lock();
+            c.say(`第 ${pos + 1} 個不是這個喔。正確順序是 ${seq.map(x => x.e).join(" ")}`, "no");
+          }
+        });
+      }, ms);
+    }
+  },
+  figureground: {
+    title: "字海找字",
+    howto: (L) => `在 ${[16, 36, 64][L]} 個相似的字裡面，找出所有指定的字。`,
+    round(c, L) {
+      const side = [4, 6, 8][L], total = [3, 4, 6][L];
+      const set = pick([["大","太","犬","天","夫"],["木","本","未","末","禾"],["日","目","田","曰","白"],["人","入","八","个"],["土","士","工","干"]]);
+      const t = pick(set), rest = set.filter(x => x !== t);
+      const spots = new Set(sample([...Array(side * side).keys()], total));
+      let found = 0;
+      c.stage.innerHTML = `<p class="prompt">找出所有的「${t}」，共 ${total} 個　<span id="fg-count">找到 0 / ${total}</span></p>
+        <div class="${gridCls(side)}">${Array.from({ length: side * side }, (_, i) => `<button class="cell char" data-i="${i}">${spots.has(i) ? t : pick(rest)}</button>`).join("")}</div>`;
+      on(c, ".cell", (btn, i) => {
+        if (btn.classList.contains("found")) return;
+        if (spots.has(i)) {
+          btn.classList.add("found"); found++;
+          c.stage.querySelector("#fg-count").textContent = `找到 ${found} / ${total}`;
+          if (found === total) c.win("全部找到了！");
+        } else { shake(btn); c.say(`這是「${btn.textContent}」，不是「${t}」喔。`, "no"); }
+      });
+    }
+  },
+  closure: {
+    title: "遮住的是什麼",
+    howto: (L) => `圖片被遮住了${["一半", "一大半", "大部分"][L]}，猜猜看是什麼。猜錯會多露出一點。`,
+    round(c, L) {
+      const item = pick(NAMED);
+      const opts = shuffle([item, ...sample(NAMED.filter(x => x !== item), 3)]);
+      const covered = new Set(sample([...Array(25).keys()], [12, 18, 21][L]));
+      c.stage.innerHTML = `<div class="peek"><span class="big">${item.e}</span>
+          <div class="mask">${Array.from({ length: 25 }, (_, i) => `<i class="m${covered.has(i) ? " on" : ""}"></i>`).join("")}</div></div>
+        <p class="prompt">被遮住的是什麼？</p>
+        <div class="opts">${opts.map((x, i) => `<button class="opt" data-i="${i}">${x.n}</button>`).join("")}</div>`;
+      const masks = c.stage.querySelectorAll(".m");
+      on(c, ".opt", (btn, i) => {
+        if (opts[i] === item) {
+          btn.classList.add("right"); masks.forEach(m => m.classList.remove("on"));
+          c.win(`答對了！是${item.n}。`);
+        } else {
+          shake(btn); btn.disabled = true;
+          sample([...masks].filter(m => m.classList.contains("on")), 4).forEach(m => m.classList.remove("on"));
+          c.say("不是喔，多露出一點給你看。", "no");
+        }
+      });
+    }
+  }
+};
+
+let gen = 0;
+function mountGame(el, g) {
+  el.innerHTML = `<div class="game-head"><h3>訓練：${g.title}</h3><span class="score">答對 0 題</span></div>
+    <div class="levels" role="group" aria-label="難易度">
+      <span class="levels-label">難易度</span>
+      ${LEVELS.map((t, i) => `<button class="lv" data-lv="${i}" aria-pressed="${i === level}">${t}</button>`).join("")}
+    </div>
+    <p class="howto"></p>
+    <div class="stage"></div>
+    <div class="gbar"><span class="msg" aria-live="polite"></span><button class="next">下一題</button></div>`;
+  const stage = el.querySelector(".stage"), msg = el.querySelector(".msg"), scoreEl = el.querySelector(".score"), howto = el.querySelector(".howto");
+  let score = 0, roundId = 0;
+  const c = {
+    stage, locked: false,
+    say(t, k) { msg.textContent = t; msg.className = "msg " + (k || ""); },
+    lock() { c.locked = true; stage.classList.add("locked"); },
+    win(t) { score++; scoreEl.textContent = `答對 ${score} 題`; c.say(t, "ok"); c.lock(); },
+    later(fn, ms) { const r = roundId, v = gen; setTimeout(() => { if (r === roundId && v === gen) fn(); }, ms); }
+  };
+  function start() {
+    roundId++; c.locked = false; stage.classList.remove("locked"); c.say("");
+    howto.textContent = g.howto(level);
+    g.round(c, level);
+  }
+  el.querySelectorAll(".lv").forEach(b => b.onclick = () => {
+    level = +b.dataset.lv;
+    try { localStorage.setItem("vp-level", level); } catch (e) {}
+    el.querySelectorAll(".lv").forEach(x => x.setAttribute("aria-pressed", x === b));
+    score = 0; scoreEl.textContent = "答對 0 題";
+    start();
+  });
+  el.querySelector(".next").onclick = start;
+  start();
+}
+
+const app = document.getElementById("app");
+const icon = (id) => `<svg viewBox="0 0 64 64" aria-hidden="true">${ICONS[id]}</svg>`;
+
+function show(html) {
+  gen++;
+  app.innerHTML = `<div class="view">${html}</div>`;
+  window.scrollTo(0, 0);
+}
+
+function renderCover() {
+  show(`
+    <div class="cover">
+      <svg class="eye" viewBox="0 0 220 120" aria-hidden="true">
+        <path class="i-s" d="M10 60 Q110 -10 210 60 Q110 130 10 60 Z" style="stroke-width:4"/>
+        <circle class="i-f" cx="110" cy="60" r="30"/>
+        <circle class="i-w" cx="120" cy="50" r="8"/>
+      </svg>
+      <h1>視知覺訓練</h1>
+      <p>認識七大視知覺能力，了解它們在學習和生活中的角色。</p>
+      <button class="start" id="btn-start">開始</button>
+    </div>`);
+  document.getElementById("btn-start").onclick = renderGrid;
+}
+
+function renderGrid() {
+  show(`
+    <div class="topbar">
+      <h2>七大視知覺</h2>
+      <button class="back" id="btn-home">回首頁</button>
+    </div>
+    <p class="lead">視知覺是大腦理解眼睛所看到訊息的能力。點選任一項目，每一項都有介紹和訓練兩個分頁。第 8 項是整合七大視知覺的闖關遊戲。最後還有視知覺測驗。</p>
+    <div class="grid">
+      ${SKILLS.map((s, i) => `
+        <button class="tile" data-i="${i}">
+          ${icon(s.id)}
+          <span>
+            <span class="num">第 ${i + 1} 項</span>
+            <h3>${s.name}</h3>
+            <span class="en">${s.en}</span>
+          </span>
+        </button>`).join("")}
+      <button class="tile tile-adv" id="tile-adv">
+        ${icon("adv")}
+        <span>
+          <span class="num">第 8 項・整合遊戲</span>
+          <h3>視知覺大冒險</h3>
+          <span class="en">All-in-one Adventure</span>
+        </span>
+      </button>
+      <button class="tile tile-test" id="tile-test">
+        ${icon("test")}
+        <span>
+          <span class="num">最後</span>
+          <h3>視知覺測驗</h3>
+          <span class="en">Assessment</span>
+        </span>
+      </button>
+    </div>
+    <section class="impact">
+      <h3>視知覺較弱時，會影響什麼？</h3>
+      <p class="meta">視知覺和視力是兩回事。視力正常的孩子，視知覺也可能較弱，常被誤會成粗心或不專心。</p>
+      <div class="impact-grid">
+        ${IMPACTS.map(x => `<div class="impact-item"><h4>${x.t}</h4><p>${x.d}</p></div>`).join("")}
+      </div>
+      <p class="meta">如果孩子有好幾項這樣的情況，可以參考最後的「視知覺測驗」，或找職能治療師做評估。</p>
+    </section>`);
+  document.getElementById("btn-home").onclick = renderCover;
+  document.getElementById("tile-test").onclick = renderTest;
+  document.getElementById("tile-adv").onclick = renderAdventure;
+  app.querySelectorAll(".tile[data-i]").forEach(b => b.onclick = () => renderDetail(+b.dataset.i));
+}
+
+function renderDetail(i, startGame) {
+  const s = SKILLS[i];
+  const prev = SKILLS[i - 1], next = SKILLS[i + 1];
+  show(`
+    <div class="topbar">
+      <button class="back" id="btn-list">← 七大視知覺</button>
+    </div>
+    <div class="detail-head">
+      ${icon(s.id)}
+      <div>
+        <h2>${s.name}</h2>
+        <div class="en">${s.en}</div>
+      </div>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="0" aria-selected="true">介紹</button>
+      <button class="tab" role="tab" data-tab="1" aria-selected="false">訓練</button>
+    </div>
+    <div class="article" id="p-intro" role="tabpanel">
+      <p class="definition">${s.def}</p>
+      <section>
+        <h3>為什麼重要</h3>
+        <p>${s.why}</p>
+      </section>
+      <section>
+        <h3>能力較弱時可能出現的情況</h3>
+        <ul>${s.signs.map(x => `<li>${x}</li>`).join("")}</ul>
+      </section>
+      <section>
+        <h3>訓練小活動</h3>
+        <ul>${s.activities.map(x => `<li>${x}</li>`).join("")}</ul>
+      </section>
+    </div>
+    <section class="game" id="game" role="tabpanel" hidden></section>
+    <nav class="pager">
+      ${prev ? `<button data-go="${i - 1}"><small>上一項</small>${prev.name}</button>` : ""}
+      ${next ? `<button data-go="${i + 1}"><small>下一項</small>${next.name}</button>` : `<button id="go-test"><small>第 8 項</small>視知覺大冒險</button>`}
+    </nav>`);
+  document.getElementById("btn-list").onclick = renderGrid;
+  const panels = [document.getElementById("p-intro"), document.getElementById("game")];
+  const mounts = [null, (el) => mountGame(el, GAMES[s.id])];
+  const tabs = app.querySelectorAll(".tab");
+  const setTab = (n) => {
+    panels.forEach((p, k) => p.hidden = k !== n);
+    tabs.forEach((t, k) => t.setAttribute("aria-selected", k === n));
+    if (mounts[n]) { mounts[n](panels[n]); mounts[n] = null; }
+  };
+  tabs.forEach(t => t.onclick = () => setTab(+t.dataset.tab));
+  if (startGame) setTab(1);
+  const goTest = document.getElementById("go-test");
+  if (goTest) goTest.onclick = renderAdventure;
+  app.querySelectorAll("[data-go]").forEach(b => b.onclick = () => renderDetail(+b.dataset.go));
+}
+
+const IMPACTS = [
+  { t: "閱讀", d: "認錯相似字、閱讀時跳行漏字、讀得很慢" },
+  { t: "書寫", d: "抄寫慢、看一筆寫一筆、字寫反、部件放錯、字超出格子" },
+  { t: "數學", d: "數字寫反、直式對不齊、看不懂圖形和幾何題" },
+  { t: "生活自理", d: "找不到東西、整理物品困難、扣釦子、分不清左右腳的鞋" },
+  { t: "手眼協調", d: "接球、剪紙、畫線等需要眼睛和手配合的事情" },
+  { t: "方向感", d: "分不清左右、看地圖和認路有困難" },
+  { t: "情緒與自信", d: "常被說粗心，容易挫折、排斥寫功課" }
+];
+
+/* ---------- Assessment ---------- */
+ICONS.test = `<rect class="i-bg" x="2" y="2" width="60" height="60" rx="14"/><rect class="i-s" x="16" y="12" width="32" height="42" rx="4"/><path class="i-ws" d="M22 24l3 3 6-6M22 36l3 3 6-6"/><path class="i-s" d="M36 25h6M36 37h6"/>`;
+
+function renderTest() {
+  show(`
+    <div class="topbar">
+      <button class="back" id="btn-list">← 七大視知覺</button>
+    </div>
+    <div class="detail-head">
+      ${icon("test")}
+      <div>
+        <h2>視知覺測驗</h2>
+        <div class="en">Visual Perception Assessment</div>
+      </div>
+    </div>
+    <section class="game" id="p-self"></section>`);
+  document.getElementById("btn-list").onclick = renderGrid;
+  mountQuiz(document.getElementById("p-self"));
+}
+
+/* ---------- 視知覺大冒險: all seven skills as planets ---------- */
+const PLANET_COLORS = ["#ff6b6b", "#ffa94d", "#ffd43b", "#51cf66", "#4dabf7", "#9775fa", "#f783ac"];
+const MAP_POS = [[24, 8], [72, 21], [28, 35], [74, 49], [26, 63], [70, 77], [40, 91]];
+const reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+let ADV = { stars: Array(7).fill(0), best: 0, sound: true };
+try { const v = JSON.parse(localStorage.getItem("vp-adv")); if (v && Array.isArray(v.stars) && v.stars.length === 7) ADV = { ...ADV, ...v }; } catch (e) {}
+const saveAdv = () => { try { localStorage.setItem("vp-adv", JSON.stringify(ADV)); } catch (e) {} };
+
+let audioCtx = null;
+function tone(freqs, dur = 0.12, type = "sine", gap = 0.09, vol = 0.15) {
+  if (!ADV.sound) return;
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const t0 = audioCtx.currentTime;
+    freqs.forEach((f, i) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain(), st = t0 + i * gap;
+      o.type = type; o.frequency.value = f;
+      g.gain.setValueAtTime(0, st); g.gain.linearRampToValueAtTime(vol, st + 0.01); g.gain.exponentialRampToValueAtTime(0.001, st + dur);
+      o.connect(g).connect(audioCtx.destination); o.start(st); o.stop(st + dur + 0.02);
+    });
+  } catch (e) {}
+}
+const SFX = {
+  tick: () => tone([440], 0.08),
+  go: () => tone([392, 523, 659], 0.14, "triangle", 0.08),
+  right: () => tone([660, 880, 1320], 0.15, "triangle", 0.07),
+  wrong: () => tone([220, 160], 0.2, "square", 0.12, 0.07),
+  star: () => tone([988, 1319], 0.18, "triangle", 0.08),
+  win: () => tone([523, 659, 784, 1047, 1319], 0.25, "triangle", 0.11),
+  fly: () => tone([300, 400, 500, 650, 800], 0.1, "sine", 0.06, 0.08)
+};
+const CHEERS = ["太棒了！", "答對了！", "好厲害！", "眼力超好！", "完美！", "超級棒！"];
+
+ICONS.adv = `<rect x="2" y="2" width="60" height="60" rx="14" style="fill:#2a1f6b"/><circle cx="20" cy="42" r="9" style="fill:#ff6b6b"/><circle cx="46" cy="20" r="7" style="fill:#4dabf7"/><circle cx="46" cy="46" r="5" style="fill:#ffd43b"/><path d="M26 36 L40 24" style="stroke:#fff;stroke-width:2.5;stroke-dasharray:3 4;stroke-linecap:round;fill:none"/><circle cx="14" cy="14" r="1.5" style="fill:#fff"/><circle cx="54" cy="56" r="1.5" style="fill:#fff"/>`;
+
+function renderAdventure() {
+  show(`
+    <div class="topbar">
+      <button class="back" id="btn-list">← 七大視知覺</button>
+    </div>
+    <section id="play"></section>`);
+  document.getElementById("btn-list").onclick = renderGrid;
+  mountAdventure(document.getElementById("play"), 0);
+}
+
+// Adventure rounds: a different way to play each skill than the 訓練 tab
+const DIRS = [
+  ["上面", 0, -1], ["下面", 0, 1], ["左邊", -1, 0], ["右邊", 1, 0],
+  ["左上角", -1, -1], ["右上角", 1, -1], ["左下角", -1, 1], ["右下角", 1, 1]
+];
+const ADV_GAMES = {
+  discrimination: {
+    howto: (L) => ["找出和上面那張卡片一模一樣的。", "找出和上面那張卡片一模一樣的，其他卡片都有一個地方不同。", "找出和上面那張卡片一模一樣的，差別可能是換了位置、換成很像的圖，或方向相反。"][L],
+    round(c, L) {
+      const GROUPS = [["🍎", "🍅", "🍒"], ["🐶", "🐱", "🐻"], ["⭐", "🌟", "✨"], ["🍋", "🍌", "🌽"], ["🚗", "🚕", "🚙"], ["🐟", "🐠", "🐡"], ["🌸", "🌼", "🌺"], ["⚽", "🏀", "⚾"]];
+      const ASYM = "🐶🐱🐻🚗🚕🚙🐟🐠🐡🍌🍋🌽🍒";
+      const cols = L === 0 ? 2 : 3, size = [4, 6, 9][L], n = [4, 4, 6][L];
+      const kinds = [["replace"], ["replace", "swap"], ["swap", "mirror", "replace"]][L];
+      const groups = sample(GROUPS, Math.min(size, L === 2 ? 4 : size));
+      const target = Array.from({ length: size }, () => ({ e: pick(pick(groups)), t: "" }));
+      const key = (card) => card.map(x => x.e + x.t).join("|");
+      const seen = new Set([key(target)]), cards = [target];
+      for (let tries = 0; cards.length < n && tries < 300; tries++) {
+        const d = target.map(x => ({ ...x })), kind = pick(kinds), i = rand(size);
+        if (kind === "replace") { const g = GROUPS.find(g => g.includes(d[i].e)); d[i].e = pick(g.filter(e => e !== d[i].e)); }
+        else if (kind === "swap") { const j = rand(size); if (d[i].e === d[j].e) continue; [d[i], d[j]] = [d[j], d[i]]; }
+        else { const k = d.findIndex((x, idx) => idx >= i && ASYM.includes(x.e)); if (k < 0) continue; d[k].t = "scaleX(-1)"; }
+        if (!seen.has(key(d))) { seen.add(key(d)); cards.push(d); }
+      }
+      const opts = shuffle(cards);
+      const draw = (card, fs = "2rem") => `<span class="mini-card" style="grid-template-columns:repeat(${cols},1fr);font-size:${fs}">${card.map(x => `<span style="transform:${x.t || "none"}">${x.e}</span>`).join("")}</span>`;
+      c.stage.innerHTML = `<div class="mini-target">${draw(target)}</div>
+        <div class="${gridCls(n === 6 ? 3 : 2)}">${opts.map((card, i) => `<button class="cell mini-opt" data-i="${i}" aria-label="卡片 ${i + 1}">${draw(card, n === 6 ? "1.15rem" : "1.7rem")}</button>`).join("")}</div>`;
+      on(c, ".cell", (btn, i) => {
+        if (opts[i] === target) { btn.classList.add("right"); c.win(); }
+        else { shake(btn); c.say("有一個地方不一樣喔，再仔細比比看。", "no"); }
+      });
+    }
+  },
+  memory: {
+    howto: (L) => `記住每個寶物藏在哪一格（${[3, 4, 5][L]} 個），寶箱關起來後，找出指定的寶物。`,
+    round(c, L) {
+      const side = L === 2 ? 4 : 3, k = [3, 4, 5][L], ms = [4000, 4000, 5000][L];
+      const pos = sample([...Array(side * side).keys()], k), items = sample(NAMED, k);
+      const at = new Map(pos.map((p, j) => [p, items[j]]));
+      const grid = (show) => `<div class="${gridCls(side)}">${Array.from({ length: side * side }, (_, i) =>
+        `<button class="cell treasure${show ? "" : " covered"}" data-i="${i}" aria-label="第 ${i + 1} 格">${show && at.has(i) ? at.get(i).e : show ? "" : "🎁"}</button>`).join("")}</div>`;
+      c.stage.innerHTML = `<p class="prompt">記住寶物的位置</p>${grid(true)}${timerBar(ms)}`;
+      c.later(() => {
+        const t = pick(items), ans = pos[items.indexOf(t)];
+        c.stage.innerHTML = `<p class="prompt big-prompt">「${t.e}」藏在哪一格？</p>${grid(false)}`;
+        on(c, ".cell", (btn, i) => {
+          if (i === ans) { btn.textContent = t.e; btn.classList.add("right"); btn.classList.remove("covered"); c.win(); }
+          else { shake(btn); btn.textContent = at.has(i) ? at.get(i).e : "💨"; btn.classList.remove("covered"); c.say("不在這裡喔，再想想看。", "no"); }
+        });
+      }, ms);
+    }
+  },
+  spatial: {
+    howto: () => "看箭頭：箭頭指向哪裡，就把動物放在房子的哪一邊。",
+    round(c, L) {
+      const side = L === 2 ? 4 : 3;
+      const animal = pick(NAMED.filter(x => ["🐶", "🐱", "🐟", "🦋"].includes(x.e)));
+      let rx = 1, ry = 1;
+      if (L === 2) { rx = 1 + rand(2); ry = 1 + rand(2); }
+      const dirs = L === 0 ? DIRS.slice(0, 4) : DIRS;
+      const [name, dx, dy] = pick(dirs.filter(([, dx, dy]) => rx + dx >= 0 && rx + dx < side && ry + dy >= 0 && ry + dy < side));
+      const ref = ry * side + rx, ans = (ry + dy) * side + (rx + dx);
+      const ang = Math.atan2(dy, dx) * 180 / Math.PI;
+      c.stage.innerHTML = `<div class="dir-cue" aria-label="把 ${animal.n}放在房子的${name}">
+          <span class="dir-animal">${animal.e}</span><span class="dir-eq">＝</span>
+          <span class="dir-house">🏠<svg class="dir-arrow" viewBox="-50 -50 100 100" style="transform:translate(-50%,-50%) rotate(${ang}deg)" aria-hidden="true"><path d="M30 -7 H46 V-17 L64 0 L46 17 V7 H30 Z"/></svg></span>
+        </div>
+        <p class="prompt speak-text">把 ${animal.e} 放在 🏠 的「${name}」</p>
+        <div class="${gridCls(side)}">${Array.from({ length: side * side }, (_, i) =>
+          i === ref ? `<span class="cell ref">🏠</span>` : `<button class="cell treasure" data-i="${i}" aria-label="第 ${i + 1} 格"></button>`).join("")}</div>`;
+      on(c, "button.cell", (btn, i) => {
+        if (i === ans) { btn.textContent = animal.e; btn.classList.add("right"); c.win(); }
+        else { shake(btn); c.say(`位置不對喔，${name}是哪一格呢？`, "no"); }
+      });
+    }
+  },
+  constancy: {
+    howto: (L) => L === 0 ? "找出所有和上面一樣的形狀，大小可能不同。" : "找出所有和上面一樣的形狀，大小、顏色和方向都可能不同。",
+    round(c, L) {
+      const keys = Object.keys(SHAPES), t = pick(keys), m = [6, 9, 12][L], need = [2, 3, 3][L];
+      const list = shuffle([...Array(need).fill(t), ...Array.from({ length: m - need }, () => pick(keys.filter(k => k !== t)))]);
+      const cols = L === 0 ? ["--accent"] : ["--accent", "--warm", "--muted"];
+      let found = 0;
+      c.stage.innerHTML = `<div class="shape-target">${shapeSvg(t, 0, 1, "--accent")}</div>
+        <p class="prompt">找到 <b id="cs-n">0</b> / ${need} 個</p>
+        <div class="${gridCls(3)}">${list.map((k, i) => `<button class="cell" data-i="${i}" aria-label="形狀 ${i + 1}">${shapeSvg(k, L === 0 ? 0 : rand(8) * 45, (0.5 + Math.random() * 0.45).toFixed(2), pick(cols))}</button>`).join("")}</div>`;
+      on(c, ".cell", (btn, i) => {
+        if (btn.classList.contains("found")) return;
+        if (list[i] === t) {
+          btn.classList.add("found"); found++; c.stage.querySelector("#cs-n").textContent = found;
+          tone([700 + found * 120], 0.1, "triangle");
+          if (found === need) c.win();
+        } else { shake(btn); c.say("形狀不一樣喔，看看邊和角。", "no"); }
+      });
+    }
+  },
+  sequential: {
+    howto: (L) => `看星球亮燈的順序（${[3, 4, 5][L]} 個），燈光秀結束後，照同樣的順序點星球。`,
+    round(c, L) {
+      const n = L === 2 ? 6 : 4, len = [3, 4, 5][L];
+      const seq = Array.from({ length: len }, () => rand(n)), notes = [523, 587, 659, 784, 880, 988];
+      c.stage.innerHTML = `<p class="prompt big-prompt" id="sim-msg">仔細看燈光秀…</p>
+        <div class="pads" style="grid-template-columns:repeat(${n === 4 ? 2 : 3},1fr)">${Array.from({ length: n }, (_, i) =>
+          `<button class="pad" data-i="${i}" style="--pc:${PLANET_COLORS[i]}" aria-label="星球 ${i + 1}"></button>`).join("")}</div>`;
+      const pads = c.stage.querySelectorAll(".pad"), label = c.stage.querySelector("#sim-msg");
+      const flash = (i) => { pads[i].classList.add("lit"); tone([notes[i]], 0.25, "triangle"); c.later(() => pads[i].classList.remove("lit"), 420); };
+      let ready = false, pos = 0;
+      seq.forEach((p, k) => c.later(() => flash(p), 700 + k * 700));
+      c.later(() => { ready = true; label.textContent = "換你了！照順序點星球"; }, 700 + len * 700);
+      on(c, ".pad", (btn, i) => {
+        if (!ready) return;
+        flash(i);
+        if (i === seq[pos]) { pos++; if (pos === len) c.win(); }
+        else { c.lock(); c.say("順序不對喔，下一題再挑戰！", "no"); }
+      });
+    }
+  },
+  figureground: {
+    howto: (L) => `在滿滿的星空裡，找出藏起來的那一個圖案（共 ${[14, 24, 34][L]} 個圖案）。`,
+    round(c, L) {
+      const n = [14, 24, 34][L], t = pick(NAMED), others = NAMED.filter(x => x !== t), ti = rand(n);
+      const items = Array.from({ length: n }, (_, i) => ({
+        e: i === ti ? t.e : pick(others).e, x: 8 + Math.random() * 84, y: 8 + Math.random() * 84,
+        r: rand(70) - 35, s: (1.6 + Math.random() * 1.1).toFixed(2)
+      }));
+      c.stage.innerHTML = `<p class="prompt big-prompt">找出藏起來的「${t.e}」</p>
+        <div class="sky-field">${items.map((it, i) => `<button data-i="${i}" style="left:${it.x}%;top:${it.y}%;--r:${it.r}deg;font-size:${it.s}rem;z-index:${i === ti ? Math.floor(n / 2) : rand(n)}" aria-label="圖案 ${i + 1}">${it.e}</button>`).join("")}</div>`;
+      on(c, ".sky-field button", (btn, i) => {
+        if (i === ti) { btn.classList.add("found"); c.win(); }
+        else { shake(btn); c.say("那不是喔，再找找看！", "no"); }
+      });
+    }
+  },
+  closure: {
+    howto: (L) => L === 0 ? "圖片在霧裡面，會慢慢變清楚。越早點出是哪一個越厲害！" : "上面的線條斷掉了，把它連起來會是下面哪一個？",
+    round(c, L) {
+      // Later questions: a broken line drawing; pick the complete one
+      if (L >= 1) {
+        const F = makeFig([4, 5, 6][L]);
+        const all = shuffle([F, ...distractors(F, 3, L, g => !same(g, F))]);
+        c.stage.innerHTML = `<div class="q-stim">${figSvg(F, { gap: [0.3, 0.4, 0.5][L], gapP: [0.6, 0.8, 1][L] })}</div>
+          <div class="${gridCls(4)}">${all.map((g, i) => `<button class="cell line-opt" data-i="${i}" aria-label="選項 ${i + 1}">${figSvg(g)}</button>`).join("")}</div>`;
+        on(c, ".cell", (btn, i) => {
+          if (all[i] === F) { btn.classList.add("right"); c.win(); }
+          else { shake(btn); btn.disabled = true; c.say("不是這個喔，把斷掉的線連起來想想看。", "no"); }
+        });
+        return;
+      }
+      // Options share a colour so the blur alone does not give the answer away
+      const COLOR_SETS = ["🍎🍓🍒🍅🎈", "🍌⭐🌙🍋🌽", "🍊🦊🏀🥕🎃", "🐟🐳🦋🚙💎", "🌸🐷🎀🍑🦩", "🍉🐸🍀🌵🥦"];
+      const set = [...new Intl.Segmenter().segment(pick(COLOR_SETS))].map(x => x.segment);
+      const four = sample(set, 4), te = pick(four), opts = shuffle(four);
+      const t = { e: te };
+      const blur = [12, 16, 20][L];
+      c.stage.innerHTML = `<div class="fog-box"><span class="fog" style="filter:blur(${blur}px)">${t.e}</span></div>
+        <p class="prompt">霧裡面是什麼？</p>
+        <div class="row">${opts.map((x, i) => `<button class="cell pic" data-i="${i}" aria-label="選項 ${i + 1}">${x}</button>`).join("")}</div>`;
+      const fog = c.stage.querySelector(".fog");
+      c.later(() => { fog.style.filter = "blur(0px)"; }, 60);
+      on(c, ".cell", (btn, i) => {
+        if (opts[i] === te) { fog.style.transition = "filter .3s"; fog.style.filter = "blur(0px)"; btn.classList.add("right"); c.win(); }
+        else { shake(btn); btn.disabled = true; c.say("不是喔，等霧散一點再看看。", "no"); }
+      });
+    }
+  }
+};
+
+function mountAdventure(el, startIdx) {
+  el.innerHTML = `<div class="adv"><canvas class="adv-sky" aria-hidden="true"></canvas><div class="adv-ui"></div><canvas class="adv-fx" aria-hidden="true"></canvas></div>`;
+  const root = el.querySelector(".adv"), ui = el.querySelector(".adv-ui"), sky = el.querySelector(".adv-sky"), fx = el.querySelector(".adv-fx");
+  const alive = () => root.isConnected;
+  let here = startIdx, token = 0;
+
+  // Twinkling, drifting stars plus confetti, drawn on two canvases
+  const stars = Array.from({ length: 90 }, () => ({ x: Math.random(), y: Math.random(), r: Math.random() * 1.6 + 0.3, p: Math.random() * 6.28, s: Math.random() * 0.0004 + 0.0001 }));
+  const parts = [];
+  const fit = (cv) => {
+    const d = window.devicePixelRatio || 1, w = Math.round(root.clientWidth * d), h = Math.round(root.clientHeight * d);
+    if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+    return d;
+  };
+  function frame(t) {
+    if (!alive()) return;
+    if (!root.offsetParent) { requestAnimationFrame(frame); return; }
+    const d = fit(sky), c = sky.getContext("2d");
+    c.clearRect(0, 0, sky.width, sky.height); c.fillStyle = "#fff";
+    stars.forEach(s => {
+      if (!reduceMotion) { s.y += s.s; if (s.y > 1) s.y = 0; }
+      c.globalAlpha = reduceMotion ? 0.8 : 0.45 + 0.55 * Math.abs(Math.sin(t / 700 + s.p));
+      c.beginPath(); c.arc(s.x * sky.width, s.y * sky.height, s.r * d, 0, 6.28); c.fill();
+    });
+    const d2 = fit(fx), f = fx.getContext("2d");
+    f.clearRect(0, 0, fx.width, fx.height);
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      p.vy += 0.22; p.vx *= 0.99; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life--;
+      if (p.life <= 0) { parts.splice(i, 1); continue; }
+      f.save(); f.globalAlpha = Math.min(1, p.life / 30); f.translate(p.x * d2, p.y * d2); f.rotate(p.rot); f.fillStyle = p.c;
+      if (p.round) { f.beginPath(); f.arc(0, 0, 3.5 * d2, 0, 6.28); f.fill(); } else f.fillRect(-5 * d2, -2.5 * d2, 10 * d2, 5 * d2);
+      f.restore();
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  function burst(x, y, n = 60) {
+    if (reduceMotion) return;
+    const cols = PLANET_COLORS.concat(["#ffffff"]);
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * 6.28, v = 3 + Math.random() * 7;
+      parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 4, rot: Math.random() * 6, vr: (Math.random() - 0.5) * 0.4, c: pick(cols), life: 60 + rand(40), round: Math.random() < 0.3 });
+    }
+  }
+  const centerOf = (node) => { const r = root.getBoundingClientRect(), b = node.getBoundingClientRect(); return [b.left - r.left + b.width / 2, b.top - r.top + b.height / 2]; };
+  function floatText(node, text, dy = 0) {
+    const [x, y] = centerOf(node), f = document.createElement("div");
+    f.className = "float-pts"; f.textContent = text; f.style.left = x + "px"; f.style.top = (y + dy) + "px";
+    root.appendChild(f); setTimeout(() => f.remove(), 1300);
+  }
+
+  function showMap(next) {
+    token++;
+    const total = ADV.stars.reduce((a, b) => a + b, 0);
+    ui.innerHTML = `
+      <div class="adv-top">
+        <h3 class="adv-title">視知覺大冒險</h3>
+        <span class="adv-total">★ ${total} / 21</span>
+        <button class="adv-snd" aria-label="${ADV.sound ? "關閉音效" : "開啟音效"}">${ADV.sound ? "🔊" : "🔇"}</button>
+      </div>
+      <p class="adv-sub">${total === 21 ? "七顆星球全部拿到三顆星！你是視知覺大師 🏆" : "坐上火箭拜訪七顆星球，每顆星球都有不同的視知覺挑戰。點一顆星球出發吧！"}</p>
+      <div class="adv-map">
+        <svg class="adv-path" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline points="${MAP_POS.map(p => p.join(",")).join(" ")}" vector-effect="non-scaling-stroke"/></svg>
+        ${SKILLS.map((s, i) => `<button class="planet${i === here ? " here" : ""}${i % 2 ? " ringed" : ""}" data-i="${i}" style="--c:${PLANET_COLORS[i]};left:${MAP_POS[i][0]}%;top:${MAP_POS[i][1]}%;--d:${-i * 0.45}s">
+          <span class="planet-ball"><span>${i + 1}</span></span>
+          <span class="planet-name">${s.name}</span>
+          <span class="planet-stars" aria-label="${ADV.stars[i]} 顆星">${"★".repeat(ADV.stars[i])}<i>${"★".repeat(3 - ADV.stars[i])}</i></span>
+        </button>`).join("")}
+        <div class="adv-rocket" aria-hidden="true"><span>🚀</span></div>
+      </div>`;
+    const rocket = ui.querySelector(".adv-rocket"), map = ui.querySelector(".adv-map");
+    const place = (i) => { rocket.style.left = MAP_POS[i][0] + "%"; rocket.style.top = MAP_POS[i][1] + "%"; };
+    rocket.style.transition = "none"; place(here); void rocket.offsetWidth; rocket.style.transition = "";
+    ui.querySelector(".adv-snd").onclick = () => { ADV.sound = !ADV.sound; saveAdv(); showMap(); };
+    const my = token;
+    const fly = (to) => {
+      ui.querySelectorAll(".planet").forEach(x => x.disabled = true);
+      const dx = (MAP_POS[to][0] - MAP_POS[here][0]) * map.clientWidth, dy = (MAP_POS[to][1] - MAP_POS[here][1]) * map.clientHeight;
+      if (to !== here) { rocket.style.setProperty("--a", (Math.atan2(dy, dx) * 180 / Math.PI + 45) + "deg"); SFX.fly(); }
+      const wait = to === here || reduceMotion ? 150 : 1050;
+      place(to); here = to;
+      setTimeout(() => { if (my === token && alive()) startLevel(to); }, wait);
+    };
+    ui.querySelectorAll(".planet").forEach(b => b.onclick = () => fly(+b.dataset.i));
+    if (next != null) setTimeout(() => { if (my === token && alive()) fly(next); }, 350);
+  }
+
+  function startLevel(i) {
+    const my = ++token, ok = () => my === token && alive();
+    const s = SKILLS[i], g = ADV_GAMES[s.id], ROUNDS = 5, LV = [0, 0, 1, 1, 2];
+    const st = { q: 0, hearts: 3, score: 0, combo: 0 };
+    let qcount = 0, c, t0;
+    ui.innerHTML = `<div class="lvl" style="--c:${PLANET_COLORS[i]}">
+      <div class="lvl-top"><button class="adv-back">← 星球地圖</button><span class="hearts" aria-label="生命"></span></div>
+      <div class="lvl-head"><span class="lvl-planet" aria-hidden="true"></span><div><h3>${s.name}星球</h3><div class="lvl-meta">分數 <b class="pts">0</b>　<span class="combo"></span></div></div></div>
+      <div class="qdots" aria-hidden="true">${"<i></i>".repeat(ROUNDS)}</div>
+      <div class="lvl-card"><div class="howto-row"><p class="howto"></p><button class="speak" aria-label="唸題目給我聽">🔈 唸題目</button></div><div class="stage"></div><p class="msg lvl-msg" aria-live="polite"></p></div>
+      <div class="count" aria-live="polite"></div>
+    </div>`;
+    const $ = (q) => ui.querySelector(q);
+    const card = $(".lvl-card"), stage = $(".stage"), msg = $(".lvl-msg");
+    const speakBtn = $(".speak");
+    if (!("speechSynthesis" in window)) speakBtn.hidden = true;
+    speakBtn.onclick = () => {
+      try {
+        const extra = stage.querySelector(".speak-text, .big-prompt, .prompt");
+        const text = ($(".howto").textContent + "。" + (extra ? extra.textContent : "")).replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, "");
+        speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text); u.lang = "zh-TW"; u.rate = 0.9;
+        speechSynthesis.speak(u);
+      } catch (e) {}
+    };
+    $(".adv-back").onclick = () => showMap();
+    const drawHearts = () => { $(".hearts").innerHTML = [0, 1, 2].map(k => `<span class="heart${k < st.hearts ? "" : " lost"}">❤️</span>`).join(""); };
+    drawHearts();
+
+    const count = $(".count"), words = ["3", "2", "1", "出發！"];
+    let n = 0;
+    const tick = () => {
+      if (!ok()) return;
+      if (n === words.length) { count.remove(); ask(); return; }
+      count.innerHTML = `<span>${words[n]}</span>`;
+      n === words.length - 1 ? SFX.go() : SFX.tick();
+      n++; setTimeout(tick, reduceMotion ? 300 : 650);
+    };
+    tick();
+
+    const advance = (ms) => setTimeout(() => { if (!ok()) return; st.q++; st.q === ROUNDS ? finish() : ask(); }, ms);
+    function ask() {
+      if (!ok()) return;
+      const L = LV[st.q], qid = ++qcount;
+      ui.querySelectorAll(".qdots i").forEach((d, k) => d.className = k < st.q ? "on" : k === st.q ? "now" : "");
+      $(".howto").textContent = g.howto(L);
+      msg.textContent = ""; msg.className = "msg lvl-msg";
+      let solved = false;
+      c = {
+        stage, locked: false,
+        say(t, k) { if (k === "no") wrong(t); },
+        lock() { c.locked = true; stage.classList.add("locked"); },
+        win() { if (solved) return; solved = true; c.lock(); right(); },
+        later(fn, ms) { setTimeout(() => { if (ok() && qid === qcount) fn(); }, ms); }
+      };
+      stage.classList.remove("locked");
+      card.classList.remove("pop"); void card.offsetWidth; card.classList.add("pop");
+      g.round(c, L);
+      t0 = Date.now();
+    }
+    function right() {
+      st.combo++;
+      const pts = 100 + (st.combo - 1) * 25 + Math.max(0, 60 - Math.floor((Date.now() - t0) / 1000) * 4);
+      st.score += pts; $(".pts").textContent = st.score;
+      const combo = $(".combo");
+      combo.textContent = st.combo > 1 ? `連擊 ×${st.combo}` : "";
+      combo.classList.remove("bump"); void combo.offsetWidth; combo.classList.add("bump");
+      msg.textContent = pick(CHEERS); msg.className = "msg lvl-msg ok";
+      SFX.right();
+      const [x, y] = centerOf(card); burst(x, y - 30, 55);
+      floatText(card, "+" + pts, -30);
+      const pl = $(".lvl-planet"); pl.classList.remove("happy", "sad"); void pl.offsetWidth; pl.classList.add("happy");
+      advance(1150);
+    }
+    function wrong(t) {
+      st.hearts--; st.combo = 0; $(".combo").textContent = ""; drawHearts(); SFX.wrong();
+      card.classList.remove("shake", "pop"); void card.offsetWidth; card.classList.add("shake");
+      const pl = $(".lvl-planet"); pl.classList.remove("happy", "sad"); void pl.offsetWidth; pl.classList.add("sad");
+      msg.textContent = t; msg.className = "msg lvl-msg no";
+      if (st.hearts <= 0) { c.lock(); setTimeout(() => ok() && fail(), 900); return; }
+      if (c.locked) advance(1800);
+    }
+    const overlay = (html) => { const o = document.createElement("div"); o.className = "lvl-done"; o.innerHTML = html; $(".lvl").appendChild(o); return o; };
+    function fail() {
+      const o = overlay(`<div class="big">💫</div><h3>能量用完了！</h3><p>沒關係，再試一次，你一定可以的！</p>
+        <div class="done-btns"><button class="adv-btn" data-a="again">再玩一次</button><button class="adv-btn ghost" data-a="map">星球地圖</button></div>`);
+      o.querySelector('[data-a="again"]').onclick = () => startLevel(i);
+      o.querySelector('[data-a="map"]').onclick = () => showMap();
+    }
+    function finish() {
+      const stars = st.hearts;
+      ADV.stars[i] = Math.max(ADV.stars[i], stars); ADV.best = Math.max(ADV.best || 0, st.score); saveAdv();
+      ui.querySelectorAll(".qdots i").forEach(d => d.className = "on");
+      SFX.win();
+      const allDone = ADV.stars.every(v => v > 0), nxt = i < SKILLS.length - 1 ? i + 1 : null;
+      const o = overlay(`<div class="done-stars">${[0, 1, 2].map(k => `<span class="dstar${k < stars ? " on" : ""}" style="animation-delay:${0.2 + k * 0.35}s">★</span>`).join("")}</div>
+        <h3>${s.name}星球 完成！</h3>
+        <p>得分 <b class="pts">${st.score}</b>${stars === 3 ? "　零失誤！" : ""}</p>
+        ${allDone ? `<p class="trophy">🏆 七顆星球都完成了！</p>` : ""}
+        <div class="done-btns">
+          ${nxt != null ? `<button class="adv-btn" data-a="next">飛往下一顆星球 🚀</button>` : ""}
+          <button class="adv-btn ghost" data-a="again">再玩一次</button>
+          <button class="adv-btn ghost" data-a="map">星球地圖</button>
+        </div>`);
+      o.querySelectorAll(".dstar.on").forEach((d, k) => setTimeout(() => {
+        if (!ok()) return;
+        const [x, y] = centerOf(d); burst(x, y, 35); SFX.star();
+      }, 450 + k * 350));
+      if (nxt != null) o.querySelector('[data-a="next"]').onclick = () => showMap(nxt);
+      o.querySelector('[data-a="again"]').onclick = () => startLevel(i);
+      o.querySelector('[data-a="map"]').onclick = () => showMap();
+    }
+  }
+
+  showMap();
+}
+
+/* ---------- TVPS-style self check: original line-drawing items ---------- */
+const segKey = (p, q) => { const a = p.join(","), b = q.join(","); return a < b ? a + "-" + b : b + "-" + a; };
+const keySet = (f) => new Set(f.map(([p, q]) => segKey(p, q)));
+const same = (f, g) => { const a = keySet(f), b = keySet(g); return a.size === b.size && [...a].every(k => b.has(k)); };
+const mapFig = (f, fn) => f.map(([p, q]) => [fn(p), fn(q)]);
+const rotK = (f, k, L = 4) => { let g = f; for (let i = 0; i < k; i++) g = mapFig(g, ([x, y]) => [L - 1 - y, x]); return g; };
+const mir = (f, L = 4) => mapFig(f, ([x, y]) => [L - 1 - x, y]);
+const anyRot = (f, g) => [0, 1, 2, 3].some(k => same(rotK(f, k), g));
+const inL = (q, L) => q[0] >= 0 && q[1] >= 0 && q[0] < L && q[1] < L;
+
+function growSeg(f, L) {
+  const ks = keySet(f), pts = f.flat();
+  for (let t = 0; t < 200; t++) {
+    const p = pick(pts), dx = rand(3) - 1, dy = rand(3) - 1;
+    if (!dx && !dy) continue;
+    const q = [p[0] + dx, p[1] + dy];
+    if (inL(q, L) && !ks.has(segKey(p, q))) return [p, q];
+  }
+  return null;
+}
+function makeFig(n, L = 4) {
+  for (;;) {
+    const p = [rand(L), rand(L)], dirs = [[1,0],[0,1],[1,1],[-1,0],[0,-1],[-1,-1],[1,-1],[-1,1]];
+    const d = pick(dirs), q = [p[0] + d[0], p[1] + d[1]];
+    if (!inL(q, L)) continue;
+    const f = [[p, q]];
+    while (f.length < n) { const s = growSeg(f, L); if (!s) break; f.push(s); }
+    const xs = f.flat().map(a => a[0]), ys = f.flat().map(a => a[1]);
+    if (f.length === n && Math.max(...xs) - Math.min(...xs) >= 2 && Math.max(...ys) - Math.min(...ys) >= 2) return f;
+  }
+}
+function mutate(f, d) {
+  for (;;) {
+    let g = f.slice();
+    for (let i = 0; i < d; i++) {
+      if (rand(2) && g.length > 3) g.splice(rand(g.length), 1);
+      else { const s = growSeg(g, 4); if (s) g.push(s); }
+    }
+    if (!same(g, f)) return g;
+  }
+}
+// level 0: unrelated figures, 1: two changes, 2: one change
+function distractors(F, n, lv, ok) {
+  const out = [];
+  for (let t = 0; out.length < n && t < 500; t++) {
+    const g = lv === 0 ? makeFig(F.length) : mutate(F, lv === 1 ? 2 : 1);
+    if (ok(g) && !out.some(o => same(o, g))) out.push(g);
+  }
+  return out;
+}
+function figSvg(f, o = {}) {
+  const L = o.L || 4;
+  const line = (a, b) => `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" vector-effect="non-scaling-stroke"/>`;
+  const lines = f.map(([p, q]) => {
+    if (o.gap && RNG() < o.gapP) {
+      const s = 0.15 + RNG() * (0.7 - o.gap), e = s + o.gap;
+      const at = (t) => [p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t];
+      return line(p, at(s)) + line(at(e), q);
+    }
+    return line(p, q);
+  }).join("");
+  return `<svg class="fig" viewBox="-0.5 -0.5 ${L} ${L}" aria-hidden="true"><g class="fig-g"${o.t ? ` transform="${o.t}"` : ""}>${lines}</g></svg>`;
+}
+const scaled = () => {
+  const s = 0.55 + RNG() * 0.3, room = (1 - s) * 1.5;
+  const dx = (RNG() * 2 - 1) * room, dy = (RNG() * 2 - 1) * room;
+  return `translate(${(1.5 + dx).toFixed(2)} ${(1.5 + dy).toFixed(2)}) scale(${s.toFixed(2)}) translate(-1.5 -1.5)`;
+};
+const SYMS = [
+  [[[0,0],[2,0]],[[2,0],[2,2]],[[2,2],[0,2]],[[0,2],[0,0]]],
+  [[[1,0],[2,2]],[[2,2],[0,2]],[[0,2],[1,0]]],
+  [[[1,0],[1,2]],[[0,1],[2,1]]],
+  [[[0,0],[2,2]],[[2,0],[0,2]]],
+  [[[0,1],[2,1]],[[1,0],[2,1]],[[1,2],[2,1]]],
+  [[[0,0],[2,0]],[[1,0],[1,2]]],
+  [[[0,0],[0,2]],[[0,2],[2,2]]],
+  [[[0,0],[2,0]],[[2,0],[0,2]],[[0,2],[2,2]]],
+  [[[1,0],[2,1]],[[2,1],[1,2]],[[1,2],[0,1]],[[0,1],[1,0]]]
+];
+const seqRow = (seq) => `<div class="seq">${seq.map(i => figSvg(SYMS[i], { L: 3 })).join("")}</div>`;
+
+// Each builder returns { prompt, stim?, memo?, after?, opts: [html], answer, list? }
+const BUILD = {
+  discrimination(lv, x = 0) {
+    const F = makeFig([3, 5, 7][lv] + x);
+    const all = shuffle([F, ...distractors(F, 3, lv, g => !same(g, F))]);
+    return { prompt: "下面哪一個和上面的圖形完全一樣？", stim: figSvg(F), opts: all.map(g => figSvg(g)), answer: all.indexOf(F) };
+  },
+  memory(lv, x = 0) {
+    const F = makeFig([3, 5, 7][lv] + x);
+    const all = shuffle([F, ...distractors(F, 3, lv, g => !same(g, F))]);
+    return { memo: figSvg(F), after: "剛剛看到的是哪一個？", opts: all.map(g => figSvg(g)), answer: all.indexOf(F) };
+  },
+  spatial(lv, x = 0) {
+    let F; do { F = makeFig([4, 5, 7][lv] + x); } while (anyRot(F, mir(F)));
+    const ks = lv === 0 ? [0, 0, 0, 0] : shuffle([0, 1, 2, 3]);
+    const odd = rand(4);
+    const opts = ks.map((k, i) => figSvg(i === odd ? rotK(mir(F), k) : rotK(F, k)));
+    return { prompt: lv === 0 ? "下面哪一個和其他的不一樣（左右翻面了）？" : "下面的圖形都轉了方向，哪一個和其他的不一樣（翻面了）？", opts, answer: odd };
+  },
+  constancy(lv, x = 0) {
+    const F = makeFig([4, 5, 6][lv] + x);
+    const ok = g => !anyRot(g, F) && !anyRot(g, mir(F));
+    const D = distractors(F, 3, lv, ok);
+    const all = shuffle([F, ...D]);
+    const k = () => lv === 0 ? 0 : rand(4);
+    return { prompt: "下面哪一個和上面是同一個形狀？（大小、位置或方向可能不同）", stim: figSvg(F),
+      opts: all.map(g => figSvg(rotK(g, k()), { t: scaled() })), answer: all.indexOf(F) };
+  },
+  sequential(lv, x = 0) {
+    const len = Math.min(7, [3, 4, 5][lv] + x), seq = sample([...SYMS.keys()], len), all = [seq];
+    while (all.length < 4) {
+      const s = seq.slice(), a = rand(len); let b = rand(len); while (b === a) b = rand(len);
+      [s[a], s[b]] = [s[b], s[a]];
+      if (lv === 0 && rand(2)) { const c = rand(len); s[c] = pick([...SYMS.keys()].filter(x => !seq.includes(x))); }
+      if (!all.some(x => x.join() === s.join())) all.push(s);
+    }
+    const opts = shuffle(all);
+    return { memo: seqRow(seq), after: "剛剛看到的順序是哪一個？", opts: opts.map(seqRow), answer: opts.indexOf(seq), list: true };
+  },
+  figureground(lv, x = 0) {
+    const F = makeFig([4, 5, 6][lv] + x), L = 6, noise = [6, 10, 14][lv];
+    const contains = (draw) => { const ks = keySet(draw); for (let ox = 0; ox <= 2; ox++) for (let oy = 0; oy <= 2; oy++)
+      if (F.every(([p, q]) => ks.has(segKey([p[0] + ox, p[1] + oy], [q[0] + ox, q[1] + oy])))) return true; return false; };
+    const scene = (base) => {
+      const ox = rand(3), oy = rand(3), d = mapFig(base, ([x, y]) => [x + ox, y + oy]);
+      const ks = keySet(d);
+      while (d.length < base.length + noise) {
+        const p = [rand(L), rand(L)], dx = rand(3) - 1, dy = rand(3) - 1, q = [p[0] + dx, p[1] + dy];
+        if ((dx || dy) && inL(q, L) && !ks.has(segKey(p, q))) { d.push([p, q]); ks.add(segKey(p, q)); }
+      }
+      return d;
+    };
+    const right = scene(F), wrong = [];
+    for (let t = 0; wrong.length < 3 && t < 300; t++) {
+      const base = lv === 0 ? makeFig(F.length) : mutate(F, lv === 1 ? 2 : 1);
+      const d = scene(base);
+      if (!contains(d)) wrong.push(d);
+    }
+    const all = shuffle([right, ...wrong]);
+    return { prompt: "上面的圖形藏在下面哪一個圖裡？", stim: figSvg(F), opts: all.map(d => figSvg(d, { L })), answer: all.indexOf(right) };
+  },
+  closure(lv, x = 0) {
+    const F = makeFig([4, 5, 6][lv] + x);
+    const all = shuffle([F, ...distractors(F, 3, lv, g => !same(g, F))]);
+    const gap = { gap: [0.3, 0.4, 0.5][lv], gapP: [0.6, 0.8, 1][lv] };
+    return { prompt: "下面哪一個圖畫完整後，會和上面的圖形一樣？", stim: figSvg(F), opts: all.map(g => figSvg(g, gap)), answer: all.indexOf(F) };
+  }
+};
+
+// Fixed item bank per subtest, generated from seeds so the same 18 items exist every visit.
+const BANK_SIZE = 18, DRAW = [2, 2, 1], PRACTICE_BANK = 2, SCORED = DRAW.reduce((a, b) => a + b, 0);
+const LV_NAME = ["簡單", "中等", "困難"];
+const mulberry = (a) => () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+let BANK = null;
+function buildBank() {
+  if (BANK) return BANK;
+  BANK = {};
+  SKILLS.forEach((s, si) => {
+    const withSeed = (seed, fn) => { RNG = mulberry(seed); try { return fn(); } finally { RNG = Math.random; } };
+    // 18 items: 6 easy, 6 medium, 6 hard; the last 3 of each band use slightly larger figures
+    const items = Array.from({ length: BANK_SIZE }, (_, i) => {
+      const lv = Math.floor(i / 6), x = i % 6 >= 3 ? 1 : 0;
+      return { no: i + 1, lv, ...withSeed(1000 * (si + 1) + i, () => BUILD[s.id](lv, x)) };
+    });
+    const practice = Array.from({ length: PRACTICE_BANK }, (_, i) => withSeed(9000 + 100 * si + i, () => BUILD[s.id](0, 0)));
+    BANK[s.id] = { items, practice };
+  });
+  return BANK;
+}
+// Draw 2 easy + 2 medium + 1 hard, presented easy → hard
+const drawItems = (id) => DRAW.flatMap((n, lv) => sample(BANK[id].items.filter(it => it.lv === lv), n));
+
+// Age reference: expected correct (out of 5) per subtest. Site-defined, not TVPS norms.
+const expectFor = (age) => age <= 5 ? 2 : age <= 7 ? 3 : age <= 10 ? 4 : 5;
+
+function mountQuiz(el) {
+  el.innerHTML = `<div class="game-head"><h3>線上自我檢測</h3></div>
+    <p class="howto">題目仿照 TVPS 的形式原創設計：黑白線條圖、看圖點選答案。每個分測驗有 ${BANK_SIZE} 題的題庫（簡單、中等、困難各 6 題），每次測驗隨機抽 ${SCORED} 題：簡單 ${DRAW[0]} 題、中等 ${DRAW[1]} 題、困難 ${DRAW[2]} 題，由易到難作答。</p>
+    <p class="howto">每個分測驗開始前，會從 ${PRACTICE_BANK} 題練習題中隨機抽 1 題，練習題會告訴你對錯，不計分。</p>
+    <p class="howto">這是練習性質的自我檢測，年齡參考標準由本網站自訂，不是 TVPS 常模，不能取代職能治療師施測的標準化測驗。</p>
+    <form class="age-form" id="age-form" novalidate>
+      <label for="age-input">孩子的年齡</label>
+      <span class="age-field"><input id="age-input" type="number" inputmode="numeric" min="4" max="21" placeholder="例如 7"> 歲</span>
+      <button class="next" type="submit">開始測驗</button>
+      <span class="msg no" id="age-msg" aria-live="polite"></span>
+    </form>`;
+  el.querySelector("#age-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const age = parseInt(el.querySelector("#age-input").value, 10);
+    if (!(age >= 4 && age <= 21)) { el.querySelector("#age-msg").textContent = "請輸入 4 到 21 之間的年齡。"; return; }
+    buildBank();
+    run(age);
+  });
+
+  function run(age) {
+    const results = {}, v = gen;
+    let si = 0, step = 0, plan = null;
+    // step 0 = practice, step 1 = notice, step 2.. = scored items
+    const ask = () => {
+      if (v !== gen) return;
+      if (si === SKILLS.length) return showResult(results, age);
+      const s = SKILLS[si];
+      if (step === 0) { plan = { practice: pick(BANK[s.id].practice), items: drawItems(s.id) }; results[s.id] = 0; }
+      if (step === 1) return startNotice(s);
+      const practice = step === 0, k = step - 2;
+      const item = practice ? plan.practice : plan.items[k];
+      const label = practice ? "練習題" : `第 ${k + 1} / ${SCORED} 題`;
+      el.innerHTML = `<div class="game-head"><h3>${s.name}</h3><span class="score">分測驗 ${si + 1} / ${SKILLS.length}　·　${label}</span></div>
+        <div class="progress" aria-hidden="true"><i style="width:${(si + (practice ? 0 : k / SCORED)) / SKILLS.length * 100}%"></i></div>
+        ${practice ? `<p class="practice-tag">練習題・不計分</p>` : ""}
+        <div class="stage"></div>
+        <div class="gbar"><span class="msg" aria-live="polite"></span></div>`;
+      const stage = el.querySelector(".stage"), msg = el.querySelector(".msg");
+      const showOpts = (prompt) => {
+        stage.innerHTML = `${item.stim ? `<div class="q-stim">${item.stim}</div>` : ""}
+          <p class="prompt">${prompt}</p>
+          <div class="q-opts${item.list ? " list" : ""}">${item.opts.map((h, i) => `<button class="q-opt" data-i="${i}" aria-label="選項 ${i + 1}"><span class="q-num">${i + 1}</span>${h}</button>`).join("")}</div>`;
+        let done = false;
+        const btns = stage.querySelectorAll(".q-opt");
+        btns.forEach(b => b.onclick = () => {
+          if (done) return;
+          done = true;
+          const ok = +b.dataset.i === item.answer;
+          if (practice) {
+            b.classList.add(ok ? "picked" : "miss");
+            btns[item.answer].classList.add("picked");
+            msg.textContent = ok ? "答對了！" : `正確答案是 ${item.answer + 1}。`;
+            msg.className = "msg " + (ok ? "ok" : "no");
+          } else {
+            b.classList.add("picked");
+            if (ok) results[s.id]++;
+          }
+          setTimeout(() => {
+            if (document.activeElement) document.activeElement.blur();
+            step++;
+            if (step === SCORED + 2) { si++; step = 0; }
+            ask();
+          }, practice ? (ok ? 900 : 2200) : 450);
+        });
+      };
+      if (item.memo) {
+        stage.innerHTML = `<p class="prompt">請仔細看，5 秒後會消失</p><div class="q-stim q-memo">${item.memo}</div>${timerBar(5000)}`;
+        setTimeout(() => { if (v === gen) showOpts(item.after); }, 5000);
+      } else showOpts(item.prompt);
+    };
+    const startNotice = (s) => {
+      el.innerHTML = `<div class="game-head"><h3>${s.name}</h3><span class="score">分測驗 ${si + 1} / ${SKILLS.length}</span></div>
+        <p class="definition">練習結束，接下來是 ${SCORED} 題正式題，不會再告訴你對錯。</p>
+        <div><button class="next" id="q-go">開始正式題</button></div>`;
+      el.querySelector("#q-go").onclick = () => { step = 2; ask(); };
+    };
+    ask();
+  }
+
+  function showResult(results, age) {
+    const exp = expectFor(age), total = Object.values(results).reduce((a, b) => a + b, 0);
+    const max = SCORED * SKILLS.length, expTotal = exp * SKILLS.length;
+    const judge = (n) => n >= exp ? ["符合年齡", "good"] : n === exp - 1 ? ["略低於年齡", ""] : ["明顯低於年齡", "low"];
+    const overall = total >= expTotal ? "整體表現符合這個年齡的參考標準。"
+      : total >= expTotal - 4 ? "整體表現略低於這個年齡的參考標準，可以多做相關練習，過一段時間再測一次。"
+      : "整體表現明顯低於這個年齡的參考標準，建議找職能治療師做正式評估。";
+    el.innerHTML = `<div class="game-head"><h3>檢測結果</h3><span class="score">${age} 歲</span></div>
+      <div class="facts">
+        <div><span class="meta">總分</span><strong>${total} / ${max} 分</strong></div>
+        <div><span class="meta">${age} 歲參考分數</span><strong>每項 ${exp} 分，共 ${expTotal} 分</strong></div>
+      </div>
+      <p class="definition">${overall}</p>
+      <div class="res">${SKILLS.map(s => {
+        const n = results[s.id] || 0, [t, cls] = judge(n);
+        return `<div class="res-row">
+          <span class="res-name">${s.name}</span>
+          <span class="meter" aria-hidden="true"><i style="width:${n / SCORED * 100}%"></i><b style="left:${exp / SCORED * 100}%"></b></span>
+          <span class="res-pts">${n} / ${SCORED}</span>
+          <span class="res-tag ${cls}">${t}</span>
+        </div>`;
+      }).join("")}</div>
+      <p class="howto">長條上的直線是 ${age} 歲的參考分數。參考分數由本網站自訂：5 歲以下每項 2 分、6–7 歲 3 分、8–10 歲 4 分、11 歲以上 5 分。練習題不計分。</p>
+      <div><button class="next" id="q-again">重新測驗</button></div>`;
+    el.querySelector("#q-again").onclick = () => mountQuiz(el);
+  }
+}
+
+renderCover();
+</script>
+
+</body></html>
